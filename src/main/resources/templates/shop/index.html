@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/layout/layout :: main-fragment(
+                                                ~{:: title},
+                                                'full-header',
+                                                ~{:: #css-resources},
+                                                ~{:: #js-resources},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title>Trang chủ</title>
+
+    <th:block id="css-resources">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/products.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/lastest-news.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/index/index-newsletter.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/index/index-category.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/index/product-showcase.css}"/>
+    </th:block>
+</head>
+<body>
+
+<th:block id="js-resources">
+    <script type="text/javascript" th:src="@{/script/index.js}"></script>
+    <script type="text/javascript" th:src="@{/script/lastest-news.js}"></script>
+</th:block>
+</body>
+</html>
