@@ -84,6 +84,9 @@
     <!-- HEADER -->
     <th:block th:replace="~{fragment/header :: ${header}}"></th:block>
 
+    <!-- BODY -->
+    <th:block th:replace="${mainContent} ?: ~{}"></th:block>
+
     <!-- LOGIN MODAL -->
     <th:block th:replace="~{fragment/login_modal :: login-modal}"></th:block>
 

@@ -21,6 +21,110 @@
     </th:block>
 </head>
 <body>
+<main id="main-content">
+    <!-- New product -->
+    <section class="products-showcase under-retail container">
+        <div class="row">
+            <div class="title col-12">
+                <h2 class="h2">Khám phá sản phẩm mới</h2><a class="see-more-btn-text text-uppercase" href="/san-pham">Xem
+                Th&ecirc;m</a>
+            </div>
+        </div>
+        <div class="row product-row d-flex justify-content-md-between">
+            <th:block th:each="product : ${products}">
+                <a class="product position-relative" th:href="@{/san-pham/{slug}/{id}(id=${product.id}, slug=${product.slug})}">
+                    <div class="card"><img class="card-img-top"
+                                           th:src="${product.image[0]}"
+                                           th:alt="${product.ten}"/>
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${product.ten}"></h5>
+                                <p class="price"><span class="text-price" th:text="${product.loaiSps[0].gia}"></span> &#x20AB; </p>
+                            <p class="card-text sold">&Dstrok;&atilde; b&aacute;n <span th:text="${product.tong_ban}"></span></p>
+                        </div>
+                    </div>
+                    <div class="shadow mx-auto position-absolute"></div>
+                </a>
+            </th:block>
+        </div>
+    </section>
+
+    <!-- Break Banner-->
+    <section class="break-banner">
+        <a href="/san-pham">
+            <img class="img-fluid" id="promo-banner-1" th:src="@{/image/banner/banner-coupon.png}" alt="promo-banner-1"/>
+        </a>
+    </section>
+
+    <!--  Best seller product -->
+<!--    <section class="products-showcase best-seller container">-->
+<!--        <div class="row">-->
+<!--            <div class="title col-12">-->
+<!--                <h2 class="h2">Sản phẩm bán chạy</h2><a-->
+<!--                    class="see-more-btn-text text-uppercase" href="/san-pham">Xem Thêm</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="row product-row d-flex justify-content-md-between">-->
+<!--            <th:block th:each="product : ${bestSellerProducts}">-->
+<!--                <a class="product position-relative" th:href="@{/san-pham/{slug}/{id}(id=${product.id}, slug=${product.slug})}">-->
+<!--                    <div class="card"><img class="card-img-top"-->
+<!--                                           th:src="${product.image[0]}"-->
+<!--                                           th:alt="${product.ten}"/>-->
+<!--                        <div class="card-body">-->
+<!--                            <h5 class="card-title" th:text="${product.ten}"></h5>-->
+<!--                            &lt;!&ndash;                            <th:block th:if="${product.promotionPrice}">&ndash;&gt;-->
+<!--                            &lt;!&ndash;                                <p class="price"><span class="text-price" th:text="${product.promotionPrice}"></span> &#x20AB;</p>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                                <p class="old-price"><span class="text-price" th:text="${product.price}"></span> &#x20AB;</p>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                            </th:block>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                            <th:block th:unless="${product.promotionPrice}">&ndash;&gt;-->
+<!--                            &lt;!&ndash;                                <p class="price"><span class="text-price" th:text="${product.price}"></span> &#x20AB;</p>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                            </th:block>&ndash;&gt;-->
+<!--                            <p class="card-text sold">&Dstrok;&atilde; b&aacute;n <span th:text="${product.tong_ban}"></span></p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="shadow mx-auto position-absolute"></div>-->
+<!--                </a>-->
+<!--            </th:block>-->
+<!--        </div>-->
+<!--    </section>-->
+
+    <!-- Break Banner-->
+    <section class="break-banner">
+        <a href="/san-pham">
+            <img class="img-fluid" id="promo-banner-2" th:src="@{/image/banner/banner02.png}" alt="promo-banner-2"/>
+        </a>
+    </section>
+
+    <!-- Newsletter Section-->
+    <section class="newsletter container-fluid d-flex justify-content-center">
+        <div class="newsletter-form-wrapper">
+            <div class="title">&Dstrok;&abreve;ng k&yacute; nh&#x1EAD;n b&#x1EA3;n tin mới nhất</div>
+            <div class="sub-title">H&atilde;y &dstrok;&abreve;ng k&yacute; &dstrok;&#x1EC3; nh&#x1EAD;n tin m&#x1EDB;i
+                nhanh nh&#x1EA5;t qua email
+            </div>
+            <div class="newsletter-form d-flex">
+                <form class="d-flex w-100 justify-content-between flex-column flex-md-row">
+                    <input class="form-control" type="text" placeholder="Nhập địa chỉ email của bạn"/>
+                    <button class="btn btn-primary text-uppercase red-btn" type="submit">&dstrok;&abreve;ng k&yacute;
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Làm nút phone -->
+    <div class="hotline-phone-ring-wrap">
+        <div class="hotline-phone-ring">
+            <div class="hotline-phone-ring-circle"></div>
+            <div class="hotline-phone-ring-circle-fill"></div>
+            <div class="hotline-phone-ring-img-circle">
+                <a href="https://www.messenger.com/t/100015115381114" class="pps-btn-img">
+                    <img width="120px" height="120px" th:src="@{/image/banner/logo.jpg}" alt="">
+                </a>
+            </div>
+        </div>
+    </div>
+
+</main>
 
 <th:block id="js-resources">
     <script type="text/javascript" th:src="@{/script/index.js}"></script>
@@ -28,3 +132,6 @@
 </th:block>
 </body>
 </html>
+
+
+
