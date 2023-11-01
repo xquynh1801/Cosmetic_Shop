@@ -8,59 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-
-@SqlResultSetMappings(
-        value = {
-                @SqlResultSetMapping(
-                        name = "sanPhamDTO",
-                        classes = @ConstructorResult(
-                                targetClass = SanPhamDTO.class,
-                                columns = {
-                                        @ColumnResult(name = "id", type = String.class),
-                                        @ColumnResult(name = "ten", type = String.class),
-                                        @ColumnResult(name = "slug", type = String.class),
-                                        @ColumnResult(name = "tong_ban", type = Integer.class),
-                                        @ColumnResult(name = "image", type = String.class)
-                                }
-                        )
-                )
-        }
-)
-@NamedNativeQuery(
-        name = "getListNewProduct",
-        resultSetMapping = "sanPhamDTO",
-        query = "SELECT sp.id, sp.ten, sp.slug, sp.tong_ban, sp.product_images as image \n" +
-                "FROM sanpham sp\n" +
-                "WHERE sp.is_available = true\n" +
-                "LIMIT ?1 \n"
-)
-@NamedNativeQuery(
-        name = "getAllProduct",
-        resultSetMapping = "sanPhamDTO",
-        query = "SELECT sp.id, sp.ten, sp.slug, sp.tong_ban, sp.product_images as image \n" +
-                "FROM sanpham sp\n"
-)
-@NamedNativeQuery(
-        name = "getListBestSellerProduct",
-        resultSetMapping = "sanPhamDTO",
-        query = "SELECT sp.id, sp.ten, sp.slug, sp.tong_ban, sp.product_images as image \n" +
-                "FROM sanpham sp\n" +
-                "WHERE sp.is_available = true\n" +
-                "LIMIT ?1 \n"
-)
-@NamedNativeQuery(
-        name = "searchProductByKeyword",
-        resultSetMapping = "sanPhamDTO",
-        query = "SELECT DISTINCT sp.id, sp.ten, sp.slug, sp.tong_ban, sp.product_images as image\n" +
-                "FROM sanpham sp\n" +
-                "WHERE sp.is_available = true AND (sp.ten LIKE CONCAT('%',:keyword,'%'))\n" +
-                "LIMIT :limit\n" +
-                "OFFSET :offset"
-)
 
 @Setter
 @Getter
@@ -76,9 +26,6 @@ public class SanPham {
     @Column(name = "ten", nullable = false, length = 300)
     private String ten;
 
-    @Column(name = "slug", nullable = false)
-    private String slug;
-
     @Column(name = "mota", columnDefinition = "TEXT")
     private String mota;
 
@@ -86,7 +33,7 @@ public class SanPham {
     @JoinColumn(name = "nhanhieu_id")
     private NhanHieu nhanHieu;
 
-    @OneToMany(mappedBy = "sanPhamSize")
+    @OneToMany(mappedBy = "sanPhamLoai")
     List<LoaiSanPham> loaiSanPhams;
 
     @Column(name = "tong_ban")
@@ -99,7 +46,7 @@ public class SanPham {
     private boolean isAvailable;
 
     @Convert(converter = StringListConverter.class, attributeName = "productImages")
-    @Column(name = "product_images")
+    @Column(name = "product_images", columnDefinition = "TEXT")
     private List<String> productImages;
 
 }

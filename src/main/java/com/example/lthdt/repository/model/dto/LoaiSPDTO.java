@@ -12,7 +12,7 @@ import javax.persistence.Column;
 public class LoaiSPDTO {
     private long id;
 
-    private String size;
+    private String tenloai;
 
     private int soluong;
 

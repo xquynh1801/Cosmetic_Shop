@@ -21,7 +21,6 @@ public class SanPhamMapper {
         return new SanPhamDTO(
                 sanPham.getId(),
                 sanPham.getTen(),
-                sanPham.getSlug(),
                 sanPham.getTong_ban(),
                 sanPham.getProductImages(),
                 sanPham.getMota(),

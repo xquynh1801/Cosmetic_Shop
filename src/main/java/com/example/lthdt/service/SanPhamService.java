@@ -11,11 +11,11 @@ import java.util.List;
 public interface SanPhamService {
     public List<SanPhamDTO> getListNewProduct();
 
-    public List<SanPhamDTO> getListBestSellerProduct();
+    public List<SanPhamDTO> getAllProduct();
+
+//    public List<SanPhamDTO> getListBestSellerProduct();
 
     public TrangDTO filterProduct(FilterSPReq req);
-
-    public List<SanPhamDTO> getAllProduct();
 
     public TrangDTO searchProductByKeyword(String keyword, Integer page);
 

@@ -73,7 +73,7 @@
                 <div class="desc-sub">
                     <span class="desc-sub-title">Loại sản phẩm: </span>
                     <select id="loaiSP" name="loaiSP">
-                        <option th:each="loaiSP : ${product.loaiSps}" th:value="${loaiSP.id}" th:data-gia="${loaiSP.gia}" th:text="${loaiSP.size}"></option>
+                        <option th:each="loaiSP : ${product.loaiSps}" th:value="${loaiSP.id}" th:data-gia="${loaiSP.gia}" th:text="${loaiSP.tenloai}"></option>
                     </select>
                 </div>
                 <div class="desc-sub">

@@ -19,7 +19,7 @@ import java.util.List;
                                 targetClass = LoaiSPDTO.class,
                                 columns = {
                                         @ColumnResult(name = "id", type = Long.class),
-                                        @ColumnResult(name = "size", type = String.class),
+                                        @ColumnResult(name = "tenloai", type = String.class),
                                         @ColumnResult(name = "soluong", type = Integer.class),
                                         @ColumnResult(name = "gia", type = Long.class)
                                 }
@@ -30,7 +30,7 @@ import java.util.List;
 @NamedNativeQuery(
         name = "getDSLoaiSPTheoSanPhamId",
         resultSetMapping = "loaiSPDTO",
-        query = "SELECT lsp.id, lsp.size, lsp.soluong, lsp.gia \n" +
+        query = "SELECT lsp.id, lsp.tenloai, lsp.soluong, lsp.gia \n" +
                 "FROM sanpham sp join loaisanpham lsp on lsp.sanpham_id = sp.id \n" +
                 "WHERE sp.is_available = true and sp.id = ?1 \n"
 )
@@ -47,8 +47,8 @@ public class LoaiSanPham {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "size")
-    private String size;
+    @Column(name = "tenloai")
+    private String tenloai;
 
     @Column(name = "soluong", nullable = false)
     private int soluong;
@@ -58,7 +58,7 @@ public class LoaiSanPham {
 
     @ManyToOne
     @JoinColumn(name = "sanpham_id")
-    private SanPham sanPhamSize;
+    private SanPham sanPhamLoai;
 
     @OneToMany(mappedBy = "loaiSanPham")
     List<GioHangSanPham> gioHangSanPhams;

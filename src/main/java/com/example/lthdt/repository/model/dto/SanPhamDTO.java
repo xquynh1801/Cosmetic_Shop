@@ -19,8 +19,6 @@ public class SanPhamDTO {
 
     private String ten;
 
-    private String slug;
-
     private int tong_ban;
 
     private List<String> image;
@@ -31,10 +29,9 @@ public class SanPhamDTO {
 
     private List<LoaiSPDTO> loaiSps;
 
-    public SanPhamDTO(String id, String ten, String slug, int tong_ban, List<String> image, String mota, NhanHieu nhanHieu) {
+    public SanPhamDTO(String id, String ten, int tong_ban, List<String> image, String mota, NhanHieu nhanHieu) {
         this.id = id;
         this.ten = ten;
-        this.slug = slug;
         this.tong_ban = tong_ban;
         this.image = image;
         this.mota=mota;

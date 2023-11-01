@@ -73,8 +73,7 @@ public class ShopController {
         }
         model.addAttribute("brandIds", brandIds);
 
-        // Render list size
-//        model.addAttribute("sizeVn", SIZE_VN);
+        System.out.println("============>listBrand " + brands.size());
 
         // Get list product
         FilterSPReq req = new FilterSPReq(brandIds, (long) 0, Long.MAX_VALUE, 1);
@@ -103,7 +102,7 @@ public class ShopController {
         return "shop/search";
     }
 
-    @GetMapping("/san-pham/{slug}/{id}")
+    @GetMapping("/san-pham/{id}")
     public String getDetailProductPage(Model model, @PathVariable String id) {
         // Get detail info
         SanPhamDTO product;
@@ -114,7 +113,6 @@ public class ShopController {
             System.out.println("============>spNhanhieu " + product.getNhanHieu().getName());
 
             List<LoaiSPDTO> loaiSp = loaiSPRepository.findLoaiSPtheoSanPhamID(product.getId());
-            System.out.println("============>loailist " + loaiSp.get(0).getSize());
 
             loaiSp.sort(new Comparator<LoaiSPDTO>() {
                 @Override

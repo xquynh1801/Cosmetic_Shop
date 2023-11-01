@@ -32,7 +32,7 @@
         </div>
         <div class="row product-row d-flex justify-content-md-between">
             <th:block th:each="product : ${products}">
-                <a class="product position-relative" th:href="@{/san-pham/{slug}/{id}(id=${product.id}, slug=${product.slug})}">
+                <a class="product position-relative" th:href="@{/san-pham/{id}(id=${product.id})}">
                     <div class="card"><img class="card-img-top"
                                            th:src="${product.image[0]}"
                                            th:alt="${product.ten}"/>

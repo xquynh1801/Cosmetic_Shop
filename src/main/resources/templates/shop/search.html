@@ -37,20 +37,16 @@
         <div class="row" th:if="${hasResult}">
             <div class="product-row">
                 <th:block th:each="product : ${listProduct}">
-                    <a class="product position-relative" target="_blank" th:href="@{/san-pham/{slug}/{id}(id=${product.id}, slug=${product.slug})}">
+                    <a class="product position-relative" target="_blank" th:href="@{/san-pham/{id}(id=${product.id})}">
                         <div class="card"><img class="card-img-top"
-                                               th:src="${product.image}"
+                                               th:src="${product.image[0]}"
                                                th:alt="${product.ten}"/>
                             <div class="card-body">
-                                <h5 class="card-title" th:text="${product.ten}"></h5>
-                                <!--                            <th:block th:if="${product.promotionPrice}">-->
-                                <!--                                <p class="price"><span class="text-price" th:text="${product.promotionPrice}"></span> &#x20AB;</p>-->
-                                <!--                                <p class="old-price"><span class="text-price" th:text="${product.price}"></span> &#x20AB;</p>-->
-                                <!--                            </th:block>-->
-                                <!--                            <th:block th:unless="${product.promotionPrice}">-->
-                                <!--                                <p class="price"><span class="text-price" th:text="${product.price}"></span> &#x20AB;</p>-->
-                                <!--                            </th:block>-->
-                                <p class="card-text sold">&Dstrok;&atilde; b&aacute;n <span th:text="${product.tong_ban}"></span></p>
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${product.ten}"></h5>
+                                    <p class="price"><span class="text-price" th:text="${product.loaiSps[0].gia}"></span> &#x20AB; </p>
+                                    <p class="card-text sold">&Dstrok;&atilde; b&aacute;n <span th:text="${product.tong_ban}"></span></p>
+                                </div>
                             </div>
                         </div>
                         <div class="shadow mx-auto position-absolute"></div>

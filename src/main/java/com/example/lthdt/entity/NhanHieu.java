@@ -28,13 +28,13 @@ import java.util.List;
 @NamedNativeQuery(
         name = "getListBrandAndProductCount",
         resultSetMapping = "nhanHieuDTO",
-        query = "SELECT brand.id, brand.name, brand.thumbnail,\n" +
+        query = "SELECT nhanhieu.id, nhanhieu.name, nhanhieu.image,\n" +
                 "(\n" +
-                "    SELECT count(product.id)\n" +
-                "    FROM product\n" +
-                "    WHERE product.brand_id = brand.id\n" +
+                "    SELECT count(sanpham.id)\n" +
+                "    FROM sanpham\n" +
+                "    WHERE sanpham.nhanhieu_id = nhanhieu.id\n" +
                 ") product_count \n" +
-                "FROM brand "
+                "FROM nhanhieu "
 )
 
 @Setter
