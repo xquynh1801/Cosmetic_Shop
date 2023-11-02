@@ -8,7 +8,5 @@ import java.util.List;
 
 @Service
 public interface NhanHieuService {
-    public List<NhanHieu> getListBrand();
-
-    public List<NhanHieuDTO> getListBrandAndProductCount();
+    public List<NhanHieuDTO> getListBrand();
 }

@@ -30,9 +30,8 @@ public class User {
     @Column(name = "matkhau")
     private String matkhau;
 
-    @Convert(converter = StringListConverter.class)
-    @Column(name = "roles", nullable = false, columnDefinition = "json")
-    private List<String> roles;
+    @Column(name = "role", nullable = false)
+    private String role;
 
     @Column(name = "diachi")
     private String diachi;

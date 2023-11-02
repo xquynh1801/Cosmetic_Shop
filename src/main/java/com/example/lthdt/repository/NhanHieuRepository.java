@@ -10,6 +10,4 @@ import java.util.List;
 
 @Repository
 public interface NhanHieuRepository extends JpaRepository<NhanHieu, Integer> {
-    @Query(nativeQuery = true, name = "getListBrandAndProductCount")
-    public List<NhanHieuDTO> getListBrandAndProductCount();
 }

@@ -24,7 +24,7 @@ public class SanPhamMapper {
                 sanPham.getTong_ban(),
                 sanPham.getProductImages(),
                 sanPham.getMota(),
-                sanPham.getNhanHieu());
+                NhanHieuMapper.toNhanHieuDTO(sanPham.getNhanHieu()));
     }
 
 //    public static Product toProduct(CreateProductReq req) {

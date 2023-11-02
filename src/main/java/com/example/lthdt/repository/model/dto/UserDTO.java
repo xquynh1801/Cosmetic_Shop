@@ -6,10 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,6 +21,6 @@ public class UserDTO {
 
     private String diachi;
 
-    private List<String> roles;
+    private String role;
 
 }

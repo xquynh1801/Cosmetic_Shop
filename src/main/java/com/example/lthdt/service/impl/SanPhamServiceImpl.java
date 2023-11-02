@@ -60,20 +60,24 @@ public class SanPhamServiceImpl implements SanPhamService {
 
         // Get list product and totalItems
         List<SanPham> products;
-        products = sanPhamRepository.getAllPr();
+        products = sanPhamRepository.locSanPham(req.getBrands());
+
         List<SanPhamDTO> sp = new ArrayList<>();
         for(SanPham s:products){
-            sp.add(SanPhamMapper.toSanPhamDTO(s));
-        }
-        for(SanPhamDTO s: sp) {
-            List<LoaiSPDTO> loaiSp = loaiSPRepository.findLoaiSPtheoSanPhamID(s.getId());
-            loaiSp.sort(new Comparator<LoaiSPDTO>() {
-                @Override
-                public int compare(LoaiSPDTO o1, LoaiSPDTO o2) {
-                    return Long.compare(o1.getGia(), o2.getGia());
-                }
-            });
-            s.setLoaiSps(loaiSp);
+
+            SanPhamDTO tmp_sp = SanPhamMapper.toSanPhamDTO(s);
+
+            List<LoaiSPDTO> loaiSp = loaiSPRepository.findLoaiSPtheoSanPhamIDvaKhoangGia(tmp_sp.getId(), req.getMinPrice(), req.getMaxPrice());
+            if(loaiSp.size() > 0) {
+                loaiSp.sort(new Comparator<LoaiSPDTO>() {
+                    @Override
+                    public int compare(LoaiSPDTO o1, LoaiSPDTO o2) {
+                        return Long.compare(o1.getGia(), o2.getGia());
+                    }
+                });
+                tmp_sp.setLoaiSps(loaiSp);
+                sp.add(tmp_sp);
+            }
         }
         // Calculate total pages
         int totalPages = page.calculateTotalPage(sp.size());
@@ -100,17 +104,16 @@ public class SanPhamServiceImpl implements SanPhamService {
         List<SanPham> products = sanPhamRepository.searchProductByKeyword(keyword, limit, pageInfo.calculateOffset());
         List<SanPhamDTO> sp = new ArrayList<>();
         for(SanPham s:products){
-            sp.add(SanPhamMapper.toSanPhamDTO(s));
-        }
-        for(SanPhamDTO s: sp) {
-            List<LoaiSPDTO> loaiSp = loaiSPRepository.findLoaiSPtheoSanPhamID(s.getId());
+            SanPhamDTO tmp_sp = SanPhamMapper.toSanPhamDTO(s);
+            List<LoaiSPDTO> loaiSp = loaiSPRepository.findLoaiSPtheoSanPhamID(tmp_sp.getId());
             loaiSp.sort(new Comparator<LoaiSPDTO>() {
                 @Override
                 public int compare(LoaiSPDTO o1, LoaiSPDTO o2) {
                     return Long.compare(o1.getGia(), o2.getGia());
                 }
             });
-            s.setLoaiSps(loaiSp);
+            tmp_sp.setLoaiSps(loaiSp);
+            sp.add(tmp_sp);
         }
 
         int totalItems = sanPhamRepository.countProductByKeyword(keyword);

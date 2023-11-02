@@ -14,4 +14,7 @@ import java.util.List;
 public interface LoaiSPRepository extends JpaRepository<LoaiSanPham, Long> {
     @Query(nativeQuery = true, name = "getDSLoaiSPTheoSanPhamId")
     public List<LoaiSPDTO> findLoaiSPtheoSanPhamID(String id);
+
+    @Query(nativeQuery = true, name = "getDSLoaiSPTheoSanPhamIdVaKhoangGia")
+    public List<LoaiSPDTO> findLoaiSPtheoSanPhamIDvaKhoangGia(String id, Long minPrice, Long maxPrice);
 }

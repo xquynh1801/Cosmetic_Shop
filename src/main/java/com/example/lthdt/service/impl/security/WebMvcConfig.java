@@ -19,11 +19,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowCredentials(false).maxAge(3600);
     }
 
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new ConfigInterceptor())
-//                .excludePathPatterns("/image/**", "/vendor/**", "/css/**", "/script/**", "/api/**", "/api/register", "/favicon.ico", "/adminlte/**", "/media/static/**");
-//    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new ConfigInterceptor())
+                .excludePathPatterns("/image/**", "/vendor/**", "/css/**", "/script/**", "/api/**", "/api/register", "/favicon.ico", "/adminlte/**", "/media/static/**");
+    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

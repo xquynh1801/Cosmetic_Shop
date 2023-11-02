@@ -183,12 +183,9 @@
     <script th:src="@{/script/shop.js}"></script>
     <script th:inline="javascript">
         let brandIds = [[${brandIds}]];
-        let categoryIds = [[${categoryIds}]];
         let currentPage = [[${currentPage}]];
         let totalPages = [[${totalPages}]];
-        let checkedCategories = [];
         let checkedBrands = [];
-        let checkedSizes = [];
         let minPrice = 0;
         let maxPrice = 0;
 
@@ -236,30 +233,6 @@
             }
         });
 
-        $(".check-category").change( function(){
-            checkedCategories = $("check-category:checked").map(function(){
-                return $(this).val();
-            }).get();
-
-            if (!$(this).hasClass('checkbox-mobile')) {
-                currentPage = 1;
-                searchProduct();
-            }
-        });
-
-        $(".check-size").click( function(){
-            $(this).toggleClass('size-choose');
-
-            checkedSizes = $(".check-size.size-choose").map(function(){
-                return $(this).data("id");
-            }).get();
-
-            if (!$(this).hasClass('checkbox-mobile')) {
-                currentPage = 1;
-                searchProduct();
-            }
-        });
-
         $('#apply-price-web').click(function() {
             minPrice = parseInt($('.price-input#from-price').val());
             maxPrice = parseInt($('.price-input#to-price').val());
@@ -297,7 +270,7 @@
         })
 
         function searchProduct() {
-            if (checkedSizes.length > 0 || checkedBrands.length > 0 || checkedCategories.length > 0 || minPrice > 0 || maxPrice > 0) {
+            if (checkedBrands.length > 0 || minPrice > 0 || maxPrice > 0) {
                 $('.clear-filter')
                     .removeAttr('disabled');
             } else {
@@ -308,16 +281,11 @@
             if (checkedBrands.length == 0) {
                 checkedBrands = brandIds;
             }
-            if (checkedCategories.length == 0) {
-                checkedCategories = categoryIds;
-            }
             if (maxPrice == 0) {
                 maxPrice = 999999999999;
             }
             req = {
 				brands: checkedBrands,
-				categories: checkedCategories,
-				sizes: checkedSizes,
 				min_price: minPrice,
 				max_price: maxPrice,
 				page: currentPage
@@ -345,20 +313,15 @@
             if (products.length > 0) {
                 let html = '';
                 for (product of products) {
-                    html += `<a class="product position-relative" target="_blank" href="/san-pham/${product.slug}/${product.id}">
+                    html += `<a class="product position-relative" target="_blank" href="/san-pham/${product.id}">
                             <div class="card"><img class="card-img-top"
-                                                   src="${product.image}"
-                                                   alt="${product.name}"/>
+                                                   src="${product.image[0]}"
+                                                   alt="${product.ten}"/>
                                 <div class="card-body">
-                                    <h5 class="card-title">${product.name}</h5>`
-                    if (product.promotionPrice > 0) {
-                        html += `<p class="price"><span class="text-price">${product.promotionPrice}</span> &#x20AB;</p>
-                                 <p class="old-price"><span class="text-price">${product.price}</span> &#x20AB;</p>`
-                    } else {
-                        html += `<p class="price"><span class="text-price">${product.price}</span> &#x20AB;</p>`
-                    }
+                                    <h5 class="card-title">${product.ten}</h5>`
+                    html += `<p class="price"><span class="text-price">${product.loaiSps[0].gia}</span> &#x20AB;</p>`
                     html += `
-                                    <p class="card-text sold">Đã bán <span>${product.totalSold}</span> đôi</p>
+                                    <p class="card-text sold">Đã bán <span>${product.tong_ban}</span></p>
                                 </div>
                             </div>
                             <div class="shadow mx-auto position-absolute"></div>
@@ -396,9 +359,7 @@
         });
 
         $(".clear-filter").click( function(){
-            checkedSizes = [];
             checkedBrands = [];
-            checkedCategories = [];
             minPrice = 0;
             maxPrice = 0;
             currentPage = 1;
@@ -410,7 +371,6 @@
               .attr('disabled', 'disabled');
 
             $('.filter-bar input').prop('checked', false);
-            $('.size .item').removeClass('size-choose');
             $('.price-input').val('');
             $('.price-input.small').val('');
             $('.apply-price:not(.small)').attr('disabled', 'disabled');

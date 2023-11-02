@@ -34,6 +34,13 @@ import java.util.List;
                 "FROM sanpham sp join loaisanpham lsp on lsp.sanpham_id = sp.id \n" +
                 "WHERE sp.is_available = true and sp.id = ?1 \n"
 )
+@NamedNativeQuery(
+        name = "getDSLoaiSPTheoSanPhamIdVaKhoangGia",
+        resultSetMapping = "loaiSPDTO",
+        query = "SELECT lsp.id, lsp.tenloai, lsp.soluong, lsp.gia \n" +
+                "FROM sanpham sp join loaisanpham lsp on lsp.sanpham_id = sp.id \n" +
+                "WHERE sp.is_available = true and sp.id = ?1 and lsp.gia >= ?2 and lsp.gia <= ?3\n"
+)
 
 @Setter
 @Getter

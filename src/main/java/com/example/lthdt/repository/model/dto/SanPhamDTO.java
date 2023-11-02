@@ -1,7 +1,5 @@
 package com.example.lthdt.repository.model.dto;
 
-import com.example.lthdt.entity.LoaiSanPham;
-import com.example.lthdt.entity.NhanHieu;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,11 +23,11 @@ public class SanPhamDTO {
 
     private String mota;
 
-    private NhanHieu nhanHieu;
+    private NhanHieuDTO nhanHieu;
 
     private List<LoaiSPDTO> loaiSps;
 
-    public SanPhamDTO(String id, String ten, int tong_ban, List<String> image, String mota, NhanHieu nhanHieu) {
+    public SanPhamDTO(String id, String ten, int tong_ban, List<String> image, String mota, NhanHieuDTO nhanHieu) {
         this.id = id;
         this.ten = ten;
         this.tong_ban = tong_ban;

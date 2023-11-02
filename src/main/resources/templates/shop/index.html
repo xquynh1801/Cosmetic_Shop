@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
       th:replace="~{/layout/layout :: main-fragment(
                                                 ~{:: title},
                                                 'full-header',
@@ -51,7 +51,7 @@
     <!-- Break Banner-->
     <section class="break-banner">
         <a href="/san-pham">
-            <img class="img-fluid" id="promo-banner-1" th:src="@{/image/banner/banner-coupon.png}" alt="promo-banner-1"/>
+            <img class="img-fluid" th:src="@{/image/banner/banner-coupon.png}" alt="promo-banner-1"/>
         </a>
     </section>
 
@@ -90,7 +90,7 @@
     <!-- Break Banner-->
     <section class="break-banner">
         <a href="/san-pham">
-            <img class="img-fluid" id="promo-banner-2" th:src="@{/image/banner/banner02.png}" alt="promo-banner-2"/>
+            <img class="img-fluid" th:src="@{/image/banner/banner02.png}" alt="promo-banner-2"/>
         </a>
     </section>
 

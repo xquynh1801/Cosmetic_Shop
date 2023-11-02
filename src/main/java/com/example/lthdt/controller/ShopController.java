@@ -6,17 +6,20 @@ import com.example.lthdt.repository.LoaiSPRepository;
 import com.example.lthdt.repository.NhanHieuRepository;
 import com.example.lthdt.repository.SanPhamRepository;
 import com.example.lthdt.repository.model.dto.LoaiSPDTO;
+import com.example.lthdt.repository.model.dto.NhanHieuDTO;
 import com.example.lthdt.repository.model.dto.SanPhamDTO;
 import com.example.lthdt.repository.model.dto.TrangDTO;
 import com.example.lthdt.repository.model.request.FilterSPReq;
 import com.example.lthdt.service.NhanHieuService;
 import com.example.lthdt.service.SanPhamService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -65,10 +68,12 @@ public class ShopController {
     @GetMapping("/san-pham")
     public String getShopPage(Model model) {
         // Get list brand
-        List<NhanHieu> brands = nhanHieuService.getListBrand();
+        List<NhanHieuDTO> brands = nhanHieuService.getListBrand();
         model.addAttribute("brands", brands);
+
+
         ArrayList<Integer> brandIds = new ArrayList<Integer>();
-        for (NhanHieu brand : brands) {
+        for (NhanHieuDTO brand : brands) {
             brandIds.add(brand.getId());
         }
         model.addAttribute("brandIds", brandIds);
@@ -128,26 +133,30 @@ public class ShopController {
         }
         model.addAttribute("product", product);
 
-        // Get related products
-//        List<SanPhamDTO> relatedProducts = sanPhamService.getRelatedProducts(id);
-//        model.addAttribute("relatedProducts", relatedProducts);
-
-        // Get list available size
-//        List<Integer> availableSizes = productService.getListAvailableSize(id);
-//        model.addAttribute("availableSizes", availableSizes);
-//        if (availableSizes.size() > 0) {
-//            model.addAttribute("canBuy", true);
-//        } else {
-//            model.addAttribute("canBuy", false);
-//        }
-
-        // Render list size
-//        model.addAttribute("sizeVn", SIZE_VN);
-//        model.addAttribute("sizeUs", SIZE_US);
-//        model.addAttribute("sizeCm", SIZE_CM);
-
         return "shop/detail";
     }
 
+    @PostMapping("/api/san-pham/loc")
+    public ResponseEntity<?> filterProduct(@RequestBody FilterSPReq req) {
+        // Validate
+        if (req.getMinPrice() == null) {
+            req.setMinPrice((long) 0);
+        } else {
+            if (req.getMinPrice() < 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mức giá phải lớn hơn 0");
+            }
+        }
+        if (req.getMaxPrice() == null) {
+            req.setMaxPrice(Long.MAX_VALUE);
+        } else {
+            if (req.getMaxPrice() < 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mức giá phải lớn hơn 0");
+            }
+        }
+
+        TrangDTO result = sanPhamService.filterProduct(req);
+
+        return ResponseEntity.ok(result);
+    }
 
 }
