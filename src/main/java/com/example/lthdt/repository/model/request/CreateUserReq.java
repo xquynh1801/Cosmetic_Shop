@@ -1,5 +1,6 @@
 package com.example.lthdt.repository.model.request;
 
+import com.example.lthdt.entity.GioHang;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;

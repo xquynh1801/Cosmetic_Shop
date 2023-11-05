@@ -37,6 +37,7 @@
     <section class="product-content-wrapper container">
         <div class="common-info">
             <div class="name" th:text="${product.ten}"></div>
+            <div id="productId" th:data-productId="${product.id}"></div>
         </div>
         <div class="main-info row">
             <div class="product-image col-lg-6">
@@ -149,10 +150,27 @@
                 if (selectedLoaiSPSoluong < quantity) {
                     toastr.warning("Số lượng hàng không đủ.");
                 } else {
-                    location.href = "/gio-hang?id="+[[${product.id}]]+"&size="+size;
+                    req = {
+                        "productId": [[${product.id}]], // productid
+                        "loaiSPId": selectedLoaiSP, // loaiSPid
+                        "soLuong": quantity // Số lượng
+                    }
+                    var myJSON = JSON.stringify(req);
+                    $.ajax({
+                        type: "POST",
+                        url: "/them-vao-gio-hang",
+                        data: myJSON,
+                        contentType: "application/json; charset=utf-8",
+                        success: function(response) {
+                            toastr.success("Thêm vào giỏ hàng thành công");
+                        },
+                        error: function() {
+                            toastr.error("Lỗi khi thêm vào giỏ hàng.");
+                        }
+                    });
                 }
             } else {
-                toastr.warning("Vui lòng đăng nhập để đặt hàng");
+                toastr.warning("Vui lòng đăng nhập để thêm vào giỏ hàng");
                 setTimeout(function() {
                     $('#signInSignUp').modal('show');
                 }, 500);

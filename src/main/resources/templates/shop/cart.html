@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/layout/layout :: main-fragment(
+                                                ~{:: title},
+                                                'short-header',
+                                                ~{:: #css-resources},
+                                                ~{:: #js-resources},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title>Giỏ hàng</title>
+    <th:block id="css-resources">
+        <link rel="stylesheet" type="text/css" th:href="@{/vendor/pagination/simplePagination.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/header.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/products.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/shop/filter-bar.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/shop/product-showing.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/shop/filter-bar-small.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/except-home-page.css}"/>
+    </th:block>
+</head>
+<body>
+<main id="main-content">
+    <!-- Breadcrum Section-->
+    <div class="breadcrumb container">
+        <a class="previous-page" href="/">Trang chủ</a>
+        <i class="fas fa-chevron-right arrow"></i>
+        <span class="current-page">Giỏ hàng</span>
+    </div>
+
+    <!-- Main content -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline">
+                <div class="card-body pad">
+                    <div class="table-responsive">
+                        <!-- Table data -->
+                        <table class="table table-striped table-bordered table-hover" style="width: 60%; margin-left: auto; margin-right: auto;">
+                            <thead>
+                            <tr class="heading">
+                                <th width="50%">
+                                    Tên sản phẩm
+                                </th>
+                                <th width="10%">
+                                    Loại sản phẩm
+                                </th>
+                                <th width="8%">
+                                    Giá
+                                </th>
+                                <th width="7%">
+                                    Số lượng
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <th:block th:each="cart_sp : ${listCart_sp}">
+                                <tr>
+                                    <td th:text="${cart_sp.sanPham.ten}"></td>
+                                    <td th:text="${cart_sp.loaiSP.tenloai}"></td>
+                                    <td th:text="${cart_sp.loaiSP.gia}"></td>
+                                    <td th:text="${cart_sp.soluong}" ></td>
+                                </tr>
+                            </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination" id="pagination"></ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<th:block id="js-resources">
+    <script type="text/javascript" th:src="@{/vendor/pagination/jquery.simplePagination.js}"></script>
+    <script type="text/javascript" th:src="@{/adminlte/dist/js/table.js}"></script>
+    <script th:src="@{/script/except-home-page.js}"></script>
+    <script th:inline="javascript">
+        $(function () {
+            pagination([[${totalPages}]], [[${currentPage}]]);
+        });
+    </script>
+</th:block>
+</body>
+</html>

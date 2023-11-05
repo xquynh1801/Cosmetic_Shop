@@ -10,6 +10,7 @@ import com.example.lthdt.repository.model.dto.NhanHieuDTO;
 import com.example.lthdt.repository.model.dto.SanPhamDTO;
 import com.example.lthdt.repository.model.dto.TrangDTO;
 import com.example.lthdt.repository.model.request.FilterSPReq;
+import com.example.lthdt.service.LoaiSPService;
 import com.example.lthdt.service.NhanHieuService;
 import com.example.lthdt.service.SanPhamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,9 @@ public class ShopController {
 
     @Autowired
     private LoaiSPRepository loaiSPRepository;
+
+    @Autowired
+    private LoaiSPService loaiSPService;
 
     @Autowired
     private NhanHieuService nhanHieuService;

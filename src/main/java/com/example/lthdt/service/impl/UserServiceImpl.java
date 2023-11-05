@@ -1,5 +1,6 @@
 package com.example.lthdt.service.impl;
 
+import com.example.lthdt.entity.GioHang;
 import com.example.lthdt.entity.User;
 import com.example.lthdt.exception.DuplicateRecordException;
 import com.example.lthdt.repository.UserRepository;

@@ -1,7 +1,9 @@
 package com.example.lthdt.controller;
 
+import com.example.lthdt.entity.GioHang;
 import com.example.lthdt.entity.User;
 import com.example.lthdt.exception.BadRequestException;
+import com.example.lthdt.repository.GioHangRepository;
 import com.example.lthdt.repository.model.mapper.UserMapper;
 import com.example.lthdt.repository.model.request.CreateUserReq;
 import com.example.lthdt.repository.model.request.LoginReq;
@@ -35,10 +37,17 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private GioHangRepository gioHangRepository;
+
     @PostMapping("/api/register")
     public ResponseEntity<?> register(@Valid @RequestBody CreateUserReq req, HttpServletResponse response) {
         // Create user
         User result = userService.createUser(req);
+
+        GioHang gioHang = new GioHang();
+        gioHang.setUser(result);
+        gioHangRepository.save((gioHang));
 
         // Gen token
         UserDetails principal = new CustomUserDetails(result);
