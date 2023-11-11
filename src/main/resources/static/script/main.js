@@ -266,19 +266,3 @@ function searchProductByKeyword() {
     location.href="/api/tim-kiem?keyword="+keyword;
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    const cartLink = document.getElementById("cart");
-
-    cartLink.addEventListener("click", function(event) {
-        if (isLogined == true) {
-            window.location.href = "/gio-hang";
-        } else {
-            toastr.warning("Vui lòng đăng nhập để xem giỏ hàng của bạn");
-            setTimeout(function() {
-                $('#signInSignUp').modal('show');
-            }, 500);
-        }
-    });
-});
-
-

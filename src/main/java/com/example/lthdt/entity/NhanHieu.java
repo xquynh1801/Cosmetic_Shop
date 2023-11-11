@@ -27,6 +27,9 @@ public class NhanHieu {
     @Column(name = "image")
     private String image;
 
+    @Column(name = "mota")
+    private String mota;
+
     @OneToMany(mappedBy = "nhanHieu", cascade = CascadeType.ALL)
     private List<SanPham> sanPhams;
 }

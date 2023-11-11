@@ -116,6 +116,17 @@
             }
         })
 
+        $('#cart').click(function() {
+            if (isLogined == true) {
+                window.location.href = "/gio-hang";
+            } else {
+                toastr.warning("Vui lòng đăng nhập để xem giỏ hàng của bạn");
+                setTimeout(function() {
+                    $('#signInSignUp').modal('show');
+                }, 500);
+            }
+        });
+
     </script>
     <!-- Common JS-->
     <th:block th:replace="${jsResources} ?: ~{}"></th:block>

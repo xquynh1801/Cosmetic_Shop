@@ -6,9 +6,9 @@ import com.example.lthdt.repository.GioHangSanPhamRepository;
 import com.example.lthdt.repository.LoaiSPRepository;
 import com.example.lthdt.repository.model.dto.*;
 import com.example.lthdt.repository.model.mapper.GioHangSanPhamMapper;
-import com.example.lthdt.repository.model.mapper.SanPhamMapper;
 import com.example.lthdt.repository.model.mapper.UserMapper;
 import com.example.lthdt.repository.model.request.AddToCartRequest;
+import com.example.lthdt.repository.model.request.DeleteAllProductCartRequest;
 import com.example.lthdt.service.GioHangSanPhamService;
 import com.example.lthdt.service.GioHangService;
 import com.example.lthdt.service.SanPhamService;
@@ -22,12 +22,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,7 +73,6 @@ public class GioHangController {
             GioHangSanPham gioHangSanPham = new GioHangSanPham();
             gioHangSanPham.setLoaiSanPham(loaiSanPham);
             gioHangSanPham.setSoluong(req.getSoLuong());
-            gioHangSanPham.setDaMua(false);
 
             // Thêm sản phẩm vào giỏ hàng của người dùng hiện tại
             gioHangSanPham.setGioHang(gioHang);
@@ -94,12 +91,16 @@ public class GioHangController {
         UserDTO user = UserMapper.toUserDto((currentUser));
 
         GioHang gioHang = gioHangService.findByUserId(user.getId());
+        model.addAttribute("cart_id", gioHang.getId());
         List<GioHangSanPham> cart_sps = gioHangSanPhamService.findByCartId(gioHang.getId());
+
+        long tong_tien = 0;
 
         List<GioHangSanPhamDTO> rs = new ArrayList<>();
         for(GioHangSanPham s:cart_sps){
             GioHangSanPhamDTO tmp_cart_sps = GioHangSanPhamMapper.toGioHangSanPhamDTO(s);
             rs.add(tmp_cart_sps);
+            tong_tien += (s.getLoaiSanPham().getGia()*s.getSoluong());
         }
 
         // Calculate total pages
@@ -110,7 +111,18 @@ public class GioHangController {
         model.addAttribute("totalPages", result.getTotalPages());
         model.addAttribute("currentPage", result.getCurrentPage());
         model.addAttribute("listCart_sp", result.getItems());
+        model.addAttribute("tong_tien", tong_tien);
 
         return "shop/cart";
     }
+
+    @PostMapping("/xoa-allproductcart")
+    public ResponseEntity<?> xoaAllProductCart(@Valid @RequestBody DeleteAllProductCartRequest req, HttpServletResponse response){
+        Optional<GioHang> result = gioHangRepository.findById(req.getCart_id());
+        GioHang gioHang = result.get();
+        gioHangSanPhamRepository.delete(gioHang.getId());
+
+        return ResponseEntity.ok("ok");
+    }
+
 }

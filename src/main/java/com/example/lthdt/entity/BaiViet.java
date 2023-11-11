@@ -23,17 +23,14 @@ public class BaiViet {
     @Column(name = "title", nullable = false, length = 300)
     private String title;
 
-    @Column(name = "slug", nullable = false, length = 600)
-    private String slug;
-
     @Column(name = "mota", columnDefinition = "TEXT")
     private String mota;
 
     @Column(name = "noidung", columnDefinition = "TEXT")
     private String noidung;
 
-    @Column(name = "thumbnail")
-    private String thumbnail;
+    @Column(name = "image")
+    private String image;
 
     @Column(name = "trangthai", columnDefinition = "int default 0")
     private int trangthai;
@@ -43,9 +40,6 @@ public class BaiViet {
 
     @Column(name = "modified_at")
     private Timestamp modifiedAt;
-
-    @Column(name = "published_at")
-    private Timestamp publishedAt;
 
     @ManyToOne
     @JoinColumn(name = "created_by")

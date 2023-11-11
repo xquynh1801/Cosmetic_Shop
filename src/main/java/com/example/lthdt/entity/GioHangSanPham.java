@@ -28,9 +28,6 @@ public class GioHangSanPham {
     @JoinColumn(name = "loaisanpham_id")
     LoaiSanPham loaiSanPham;
 
-    @Column(name = "damua")
-    private boolean daMua;
-
     @Column(name = "soluong", nullable = false)
     private int soluong;
 }

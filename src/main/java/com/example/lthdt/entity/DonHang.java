@@ -41,6 +41,9 @@ public class DonHang {
     @Column(name = "giamgia")
     private long giamgia;
 
+    @Column(name = "phigiaohang")
+    private String phigiaohang;
+
     @Column(name = "tongtra")
     private long tongtra;
 
@@ -63,24 +66,6 @@ public class DonHang {
 
     @Column(name = "is_paid")
     private int isPaid;
-
-//    @Type(type = "json")
-//    @Column(name = "promotion", columnDefinition = "json")
-//    private UsedPromotion promotion;
-
-//    @Getter
-//    @Setter
-//    @NoArgsConstructor
-//    @AllArgsConstructor
-//    public static class UsedPromotion {
-//        private String couponCode;
-//
-//        private int discountType;
-//
-//        private long discountValue;
-//
-//        private long maximumDiscountValue;
-//    }
 
     @Column(name = "note")
     private String note;

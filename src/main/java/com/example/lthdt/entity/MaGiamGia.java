@@ -21,16 +21,19 @@ public class MaGiamGia {
     private long id;
 
     @Column(name = "name", nullable = false, length = 300)
-    private String name;
+    private String ten;
 
-    @Column(name = "discount_value")
-    private long discountValue;
+    @Column(name = "soluong")
+    private long soluong;
 
-    @Column(name = "maximum_discount_value")
-    private long maximumDiscountValue;
+    @Column(name = "giatri")
+    private long giatri;
 
-    @Column(name = "discount_type")
-    private int discountType;
+    @Column(name = "max_giatri")
+    private long max_giatri;
+
+    @Column(name = "loai")
+    private int loai;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
@@ -38,19 +41,10 @@ public class MaGiamGia {
     @Column(name = "expired_at")
     private Timestamp expiredAt;
 
-    @Column(name = "coupon_code", unique = true)
-    private String couponCode;
+    @Column(name = "code", unique = true)
+    private String code;
 
     @Column(name = "is_active", columnDefinition = "TINYINT(1)")
     private boolean isActive;
 
-    @Column(name = "is_public", columnDefinition = "TINYINT(1)")
-    private boolean isPublic;
-
-//    public MaGiamGia544(Order.UsedPromotion promotion) {
-//        this.discountValue = promotion.getDiscountValue();
-//        this.maximumDiscountValue = promotion.getMaximumDiscountValue();
-//        this.discountType = promotion.getDiscountType();
-//        this.couponCode = promotion.getCouponCode();
-//    }
 }
