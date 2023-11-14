@@ -33,11 +33,9 @@ public class HoaDon {
     @Column(name = "tongtra")
     private long tongtra;
 
-    public HoaDon(Long Id, String phuongthucthanhtoan, DonHang donHang, String mota, long tongtra){
-        this.id = Id;
+    public HoaDon(String phuongthucthanhtoan, DonHang donHang, long tongtra){
         this.phuongthucthanhtoan = phuongthucthanhtoan;
         this.donHang = donHang;
-        this.mota = mota;
         this.tongtra=tongtra;
         this.thoigian = new Date();
     }

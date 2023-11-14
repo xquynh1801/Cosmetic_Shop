@@ -1,6 +1,5 @@
 package com.example.lthdt.repository;
 
-import com.example.lthdt.entity.GioHang;
 import com.example.lthdt.entity.GioHangSanPham;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -28,4 +27,5 @@ public interface GioHangSanPhamRepository extends JpaRepository<GioHangSanPham, 
     @Transactional
     @Query(value = "DELETE FROM sanpham_giohang WHERE giohang_id = ?1", nativeQuery = true)
     public int delete(Long id);
+
 }

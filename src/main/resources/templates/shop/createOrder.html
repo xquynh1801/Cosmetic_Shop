@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/layout/layout :: main-fragment(
+                                                ~{:: title},
+                                                'short-header',
+                                                ~{:: #css-resources},
+                                                ~{:: #js-resources},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title>Đặt hàng</title>
+
+    <th:block id="css-resources">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/header.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/buying/product-info.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/buying/pricing.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/buying/shipping-info.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/product-details/size-choose.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/buying/buying-section.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/product-details/size-guide-table.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/input-radio.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/except-home-page.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/buying.css}"/>
+    </th:block>
+</head>
+<body>
+<main id="main-content">
+    <div class="main-wrapper container">
+        <div class="row">
+            <section class="buying col-lg-5">
+                <!-- Adress Section-->
+                <div class="address-info-wrapper childs">
+                    <div class="coupon price-include">
+                        <div class="text required-label">Người nhận hàng</div>
+                        <div>
+                            <input class="form-control" placeholder="Nhập tên người nhận" type="text" th:value="${user.hoten}" id="in-user-fullname"/>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="coupon price-include">
+                        <div class="text required-label">Điện thoại</div>
+                        <div>
+                            <input class="form-control" placeholder="Nhập số điện thoại" type="text" th:value="${user.sdt}" id="in-user-phone"/>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="coupon price-include">
+                        <div class="text required-label">Địa chỉ</div>
+                        <div>
+                            <textarea class="form-control" placeholder="Nhập địa chỉ" rows="2" th:text="${user.diachi}" id="in-user-address"></textarea>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group" style="margin-top:30px">
+                    <input type="text" class="form-control" placeholder="Nhập mã khuyến mãi" id="in-coupon">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="btn-apply-coupon">Áp dụng khuyến mãi</button>
+                    </div>
+                </div>
+                <!-- Pricing Section-->
+                <div class="pricing childs">
+                    <div class="coupon price-include">
+                        <div class="text">Tổng giá</div>
+                        <input class="form-control text-price-input" id="in-price" type="text" th:value="${tong_tien}" readonly/>
+                    </div>
+                    <div class="coupon price-include">
+                        <div class="text">Khuyến mãi</div>
+                        <input class="form-control text-price-input" id="in-promotion-value" type="text" readonly/>
+                    </div>
+                    <div class="coupon price-include">
+                        <div class="text">Tổng thanh toán</div>
+                        <input class="form-control text-price-input" id="in-total-price" type="text" readonly/>
+                    </div>
+                </div>
+                <a th:href="@{/gio-hang}">
+                    <button class="btn btn-secondary confirm-btn">Quay lại</button>
+                </a>
+                <button class="btn btn-primary confirm-btn red-btn" id="btn-buy-now">Đặt hàng</button>
+            </section>
+        </div>
+    </div>
+</main>
+
+<th:block id="js-resources">
+    <script th:src="@{/script/except-home-page.js}"></script>
+    <script th:src="@{/script/size-choose.js}"></script>
+    <script th:src="@{/script/buy-page.js}"></script>
+    <script th:inline="javascript">
+        let price = [[${tong_tien}]];
+        let giamgia = 0;
+        let totalPrice = price;
+        $('#in-total-price').val(totalPrice);
+
+        $('#btn-apply-coupon').click(function() {
+            let magiamgia = $('#in-coupon').val();
+            req = {
+                "magiamgia": magiamgia
+            }
+            var myJSON = JSON.stringify(req);
+            $.ajax({
+                url: '/api/check-magiamgia',
+                type: 'POST',
+                data: myJSON,
+                contentType: "application/json; charset=utf-8",
+                success: function(data) {
+                    giamgia = data.max_giatri;
+                    totalPrice = price - giamgia;
+                    $('#in-price').val(price);
+                    $('#in-promotion-value').val(giamgia);
+                    $('#in-total-price').val(totalPrice);
+                    formatMoney();
+                },
+                error: function(response) {
+                    console.log(response)
+                    $('#in-coupon').val(magiamgia);
+                    toastr.warning(response);
+                },
+            });
+        })
+
+        $('#btn-buy-now').click(function() {
+            let receiverName = $('#in-user-fullname').val();
+            let receiverPhone = $('#in-user-phone').val();
+            let receiverAddress = $('#in-user-address').val();
+            let isValid = true;
+            if (receiverName.length == 0) {
+                fullNameInvalid = $('#in-user-fullname').next();
+                fullNameInvalid.css('display', 'block');
+                fullNameInvalid.html('Vui lòng nhập họ tên người nhận hàng');
+                isValid = false;
+            }
+            if (receiverPhone.length == 0) {
+                phoneInvalid = $('#in-user-phone').next();
+                phoneInvalid.css('display', 'block');
+                phoneInvalid.html('Vui lòng nhập số điện thoại người nhận hàng');
+                isValid = false;
+            }
+            let phoneFormat = new RegExp(/((09|03|07|08|05)+([0-9]{8})\b)/g);
+            if (!phoneFormat.test(receiverPhone)) {
+                phoneInvalid = $('#in-user-phone').next();
+                phoneInvalid.css('display', 'block');
+                phoneInvalid.html('Số điện thoại không hợp lệ');
+                isValid = false;
+            }
+            if (receiverAddress.length == 0) {
+                addressInvalid = $('#in-user-address').next();
+                addressInvalid.css('display', 'block');
+                addressInvalid.html('Vui lòng nhập địa chỉ nhận hàng');
+                isValid = false;
+            }
+
+            if (isValid) {
+                req = {
+                    receiver_name: receiverName,
+                    receiver_phone: receiverPhone,
+                    receiver_address: receiverAddress,
+                    price: price,
+                    giamgia: giamgia,
+                    total_price: totalPrice,
+                }
+                var myJSON = JSON.stringify(req);
+                $.ajax({
+                    url: '/saveOrder',
+                    type: 'POST',
+                    data: myJSON,
+                    contentType: "application/json; charset=utf-8",
+                    success: function(response) {
+                        if (response === "ok") {
+                            toastr.success("Đặt hàng thành công");
+                            window.location.href = "/";
+                        } else if (response === "not ok") {
+                            toastr.error("Hãy kiểm tra lại số lượng sản phẩm trong giỏ hàng");
+                        }
+                    },
+                    error: function(data) {
+                        toastr.warning(data.responseJSON.message);
+                    },
+                });
+            }
+        })
+    </script>
+</th:block>
+</body>
+</html>
+
+

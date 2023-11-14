@@ -21,7 +21,7 @@ public class GioHang {
     @OneToMany(mappedBy = "gioHang")
     List<GioHangSanPham> gioHangSanPhams;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

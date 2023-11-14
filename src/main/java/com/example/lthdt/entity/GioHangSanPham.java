@@ -20,7 +20,12 @@ public class GioHangSanPham {
     @Column(name = "id")
     private long id;
 
-    @ManyToOne
+    public long getId() {
+        System.out.println(this.id);
+        return id;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "giohang_id")
     GioHang gioHang;
 

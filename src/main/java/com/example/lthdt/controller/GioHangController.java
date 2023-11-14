@@ -19,9 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -125,4 +123,19 @@ public class GioHangController {
         return ResponseEntity.ok("ok");
     }
 
+    @RequestMapping("/delete/cart_product/{id}")
+    public String deleteCartProduct(@PathVariable long id){
+        gioHangSanPhamRepository.deleteById(id);
+
+        return "redirect:/gio-hang";
+    }
+
+    @GetMapping("/fix_cart/{id}")
+    public String FixCart(@PathVariable long id, Model model){
+        Optional<GioHangSanPham> result = gioHangSanPhamRepository.findById(id);
+        GioHangSanPhamDTO gioHangSanPham= GioHangSanPhamMapper.toGioHangSanPhamDTO(result.get());
+        model.addAttribute("gioHangSanPham", gioHangSanPham);
+        return "shop/fix-cart";
+//        return "404";
+    }
 }

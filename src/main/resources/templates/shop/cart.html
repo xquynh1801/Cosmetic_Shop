@@ -41,7 +41,7 @@
                                 <table class="table table-striped table-bordered table-hover">
                                     <thead>
                                     <tr class="heading">
-                                        <th width="50%">
+                                        <th width="40%">
                                             Tên sản phẩm
                                         </th>
                                         <th width="10%">
@@ -50,18 +50,26 @@
                                         <th width="8%" style="text-align: center">
                                             Giá
                                         </th>
-                                        <th width="7%">
+                                        <th width="7%" style="text-align: center">
                                             Số lượng
+                                        </th>
+                                        <th width="4%" style="text-align: center">
+                                            Xoá
                                         </th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <th:block th:each="cart_sp : ${listCart_sp}">
                                         <tr>
-                                            <td th:text="${cart_sp.sanPham.ten}"></td>
+                                            <td>
+                                                <a th:href="@{/fix_cart/{id}(id=${cart_sp.id})}" th:text="${cart_sp.sanPham.ten}"></a>
+                                            </td>
                                             <td th:text="${cart_sp.loaiSP.tenloai}" style="text-align: center"></td>
                                             <td class="text-price" th:text="${cart_sp.loaiSP.gia}" style="text-align: center"></td>
                                             <td th:text="${cart_sp.soluong}" style="text-align: center"></td>
+                                            <td style="text-align: center">
+                                                <a th:href="@{/delete/cart_product/{id}(id=${cart_sp.id})}" style="text-align: center; color: red">Xóa</a>
+                                            </td>
                                         </tr>
                                     </th:block>
                                     </tbody>
@@ -119,6 +127,28 @@
             });
         })
 
+        $('#createOrderButton').click(function() {
+            req = {
+                "cart_id": [[${cart_id}]],
+            }
+            var myJSON = JSON.stringify(req);
+            $.ajax({
+                type: "POST",
+                url: "/check_create_order",
+                data: myJSON,
+                contentType: "application/json; charset=utf-8",
+                success: function(response) {
+                    if (response === "ok") {
+                        window.location.href = "/create_order";
+                    } else if (response === "not ok") {
+                        toastr.error("Hãy kiểm tra lại số lượng sản phẩm trong giỏ hàngs");
+                    }
+                },
+                error: function() {
+                    toastr.error("Lỗi khi tạo đơn hàng.");
+                }
+            });
+        })
         pagination([[${totalPages}]], [[${currentPage}]]);
     </script>
 </th:block>

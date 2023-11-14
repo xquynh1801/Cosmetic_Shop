@@ -2,6 +2,8 @@ package com.example.lthdt.repository.model.dto;
 
 import lombok.*;
 
+import javax.persistence.Transient;
+
 @Getter
 @Setter
 @NoArgsConstructor

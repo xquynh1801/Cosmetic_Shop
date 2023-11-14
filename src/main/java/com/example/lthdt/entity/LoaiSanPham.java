@@ -67,7 +67,7 @@ public class LoaiSanPham {
     @JoinColumn(name = "sanpham_id")
     private SanPham sanPhamLoai;
 
-    @OneToMany(mappedBy = "loaiSanPham")
+    @OneToMany(mappedBy = "loaiSanPham", fetch = FetchType.LAZY)
     List<GioHangSanPham> gioHangSanPhams;
 
     @OneToMany(mappedBy = "loaiSanPhamMua")

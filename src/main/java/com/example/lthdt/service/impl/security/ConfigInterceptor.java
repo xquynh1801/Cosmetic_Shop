@@ -13,7 +13,7 @@ public class ConfigInterceptor implements HandlerInterceptor  {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))) {
+        if (authentication != null && !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))) {
             CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
             modelAndView.addObject("user_fullname", principal.getUser().getHoten());
             modelAndView.addObject("user_phone", principal.getUser().getSdt());
