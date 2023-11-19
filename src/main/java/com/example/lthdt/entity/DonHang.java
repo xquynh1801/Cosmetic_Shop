@@ -62,7 +62,10 @@ public class DonHang {
     private User modifiedBy;
 
     @Column(name = "trangthai")
-    private int trangthai;//0: cho xac nhan, 1: cho van chuyen, 2: dang van chuyen, 3: da hoan thanh, 4: huy don
+    private int trangthai;
+
+    @Column(name = "phuongthucthanhtoan")
+    private String phuongthucthanhtoan;
 
     @Column(name = "is_paid")
     private int isPaid;

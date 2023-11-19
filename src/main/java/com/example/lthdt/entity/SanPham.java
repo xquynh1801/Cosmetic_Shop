@@ -49,5 +49,10 @@ public class SanPham {
     @Column(name = "product_images", columnDefinition = "TEXT")
     private List<String> productImages;
 
+    public SanPham(String id) {
+        this.id = id;
+        this.nhanHieu = new NhanHieu(Integer.parseInt(id));
+        this.loaiSanPhams = new ArrayList<>();
+    }
 }
 

@@ -154,20 +154,23 @@ public class DonHangController {
         donHang.setTongtra(req.getTotal_price());
         donHang.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         donHang.setNguoidat(currentUser);
+        donHang.setPhuongthucthanhtoan("Thanh toán khi nhận hàng");
         donHang.setTrangthai(0);
         donHang.setIsPaid(0);
         donHangRepository.save(donHang);
 
-        SanPhamMua sanPhamMua = new SanPhamMua();
+
         for(GioHangSanPham s:result){
+            SanPhamMua sanPhamMua = new SanPhamMua();
             sanPhamMua.setSoluongmua(s.getSoluong());
             sanPhamMua.setDonHang(donHang);
             sanPhamMua.setLoaiSanPhamMua(s.getLoaiSanPham());
-        }
-        sanPhamMuaRepository.save(sanPhamMua);
+            sanPhamMuaRepository.save(sanPhamMua);
 
-        HoaDon hoaDon = new HoaDon("Thanh toán khi nhận hàng", donHang, req.getTotal_price());
-        hoaDonRepository.save(hoaDon);
+            loaiSPRepository.update(((s.getLoaiSanPham().getSoluong()) - s.getSoluong()), s.getLoaiSanPham().getId());
+        }
+//        HoaDon hoaDon = new HoaDon("Thanh toán khi nhận hàng", donHang, req.getTotal_price());
+//        hoaDonRepository.save(hoaDon);
 
         gioHangSanPhamRepository.delete(gioHang.getId());
 

@@ -32,4 +32,8 @@ public class NhanHieu {
 
     @OneToMany(mappedBy = "nhanHieu", cascade = CascadeType.ALL)
     private List<SanPham> sanPhams;
+
+    public NhanHieu(int id) {
+        this.id = id;
+    }
 }

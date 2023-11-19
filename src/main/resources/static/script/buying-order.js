@@ -25,41 +25,45 @@ $('.order-status').click(function() {
     });
 })
 
-function showListOrder(orders) {
+function showListOrder(data) {
     let html = '';
-    for (order of orders) {
+    for (item of data) {
+        console.log(item);
         html += `
-                            <div class="item">
+                             <div class="item">
                                 <div class="header-item">
                                     <div class="order-number-wrapper">
-                                        Mã đơn <a class="order-number" href="/tai-khoan/lich-su-giao-dich/${order.id}">#${order.id}</a>
+                                        Mã đơn <a class="order-number" href="/tai-khoan/lich-su-giao-dich/${item.id}">#${item.id}</a>
                                     </div>
-                                    <a class="full-details" href="/tai-khoan/lich-su-giao-dich/${order.id}">Xem chi tiết</a>
+                                    <a class="full-details" href="/tai-khoan/lich-su-giao-dich/${item.id}">Xem chi tiết</a>
                                 </div>
                                 <div class="item-info-wrapper">
                                     <div class="product-info-wrapper">
-                                        <div class="thumbnails"><img class="img-fluid" src="${order.productImg}" alt="${order.productName}"/></div>
-                                        <div class="product-info"><span class="name">${order.productName}</span>
-                                            <div class="size"><span>${order.sizeUs}</span>US | <span>${order.sizeVn}</span>VN | <span>${order.sizeCm}</span>CM</div>
-                                        </div>
+                                        <div class="product-info"><span class="name">${item.tenNguoiNhan}</span></div>
                                     </div>
-                                    <div class="price bid-price"><span class="text-price">${order.totalPrice}</span> &#x20AB;</div>
+                                    <div>
+                                        <p class="price">
+                                            <span class="text-price">${item.tongtra}</span> &#x20AB;
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <div><span>${item.createdAt}</span></div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="item-small">
                                 <div class="order-number-wrapper">
-                                    Mã đơn <a class="order-number" href="/tai-khoan/lich-su-giao-dich/${order.id}">#${order.id}</a>
+                                    Mã đơn <a class="order-number" href="/tai-khoan/lich-su-giao-dich/${item.id}">#${item.id}</a>
                                 </div>
                                 <div class="item-info-wrapper">
                                     <div class="product-info-wrapper">
                                         <div class="product-info">
-                                            <a class="name" href="/tai-khoan/lich-su-giao-dich/${order.id}">${order.productName}</a>
-                                            <div class="size">
-                                                <span>${order.sizeUs}</span>US | <span>${order.sizeVn}</span>VN | <span>${order.sizeCm}</span>CM
-                                            </div>
+                                            <a class="name" href="/tai-khoan/lich-su-giao-dich/${item.id}">${item.tenNguoiNhan}</a>
                                         </div>
                                     </div>
-                                    <div class="price bid-price"><span class="text-price">${order.totalPrice}</span> &#x20AB;</div>
+                                    <div class="product-info-wrapper">
+                                        <div class="product-info"><span>${item.createdAt}</span></div>
+                                    </div>
                                 </div>
                             </div>
         `
@@ -93,6 +97,7 @@ $('.cancel-btn').click(function() {
                 toastr.success("Hủy đơn hàng thành công");
                 $('.status').html("Đã hủy");
                 $('.cancel-btn').remove();
+                window.location.href = "/tai-khoan/lich-su-giao-dich";
             },
             error: function(data) {
                 toastr.warning(data.responseJSON.message);

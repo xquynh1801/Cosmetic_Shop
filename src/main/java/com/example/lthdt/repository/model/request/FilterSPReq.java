@@ -20,4 +20,8 @@ public class FilterSPReq {
     private Long maxPrice;
 
     private int page;
+
+    public FilterSPReq(List<Integer> brands) {
+        this.brands = brands;
+    }
 }

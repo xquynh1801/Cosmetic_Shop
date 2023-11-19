@@ -33,10 +33,11 @@ public class HoaDon {
     @Column(name = "tongtra")
     private long tongtra;
 
-    public HoaDon(String phuongthucthanhtoan, DonHang donHang, long tongtra){
+    public HoaDon(String phuongthucthanhtoan, DonHang donHang, long tongtra, String mota){
         this.phuongthucthanhtoan = phuongthucthanhtoan;
         this.donHang = donHang;
         this.tongtra=tongtra;
+        this.mota=mota;
         this.thoigian = new Date();
     }
 }

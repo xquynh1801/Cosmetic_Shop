@@ -48,12 +48,6 @@ public class SanPhamServiceImpl implements SanPhamService {
         return sp;
     }
 
-//    @Override
-//    public List<SanPhamDTO> getListBestSellerProduct() {
-//        List<SanPhamDTO> sanphams = sanPhamRepository.getListBestSellerProduct(5);
-//        return sanphams;
-//    }
-
     @Override
     public List<SanPhamDTO> getAllProduct() {
         List<SanPham> sanphams = sanPhamRepository.getAllPr();

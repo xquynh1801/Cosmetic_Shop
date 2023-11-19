@@ -36,4 +36,9 @@ public class SanPhamDTO {
         this.nhanHieu=nhanHieu;
         this.loaiSps = new ArrayList<>();
     }
+
+    public SanPhamDTO(String id) {
+        this.id = id;
+        this.loaiSps = new ArrayList<>();
+    }
 }

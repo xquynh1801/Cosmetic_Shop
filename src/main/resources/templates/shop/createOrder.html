@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
       th:replace="~{/layout/layout :: main-fragment(
                                                 ~{:: title},
                                                 'short-header',
@@ -28,7 +28,18 @@
 <main id="main-content">
     <div class="main-wrapper container">
         <div class="row">
-            <section class="buying col-lg-5">
+            <section class="col-lg-6">
+                <h2>Thông tin sản phẩm</h2>
+                <div class="address-info-wrapper childs">
+                    <div class="row" th:each="cartProduct : ${listCartProduct}">
+                        <div class="col-sm-6 font-weight-bold" th:text="${cartProduct.sanPham.ten}"></div>
+                        <div class="col-sm-4" th:text="${cartProduct.loaiSP.tenloai}"></div>
+                        <div class="col-sm-2" th:text="'x'+${cartProduct.soluong}"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="buying col-lg-6">
                 <!-- Adress Section-->
                 <div class="address-info-wrapper childs">
                     <div class="coupon price-include">
@@ -85,7 +96,6 @@
 
 <th:block id="js-resources">
     <script th:src="@{/script/except-home-page.js}"></script>
-    <script th:src="@{/script/size-choose.js}"></script>
     <script th:src="@{/script/buy-page.js}"></script>
     <script th:inline="javascript">
         let price = [[${tong_tien}]];
@@ -169,7 +179,9 @@
                     success: function(response) {
                         if (response === "ok") {
                             toastr.success("Đặt hàng thành công");
-                            window.location.href = "/";
+                            setTimeout(function() {
+                                location.href = "/tai-khoan/lich-su-giao-dich";
+                            }, 1000)
                         } else if (response === "not ok") {
                             toastr.error("Hãy kiểm tra lại số lượng sản phẩm trong giỏ hàng");
                         }
