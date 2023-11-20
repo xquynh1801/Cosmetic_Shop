@@ -25,6 +25,4 @@ public interface DonHangRepository extends JpaRepository<DonHang, Long> {
     @Query(value = "UPDATE donhang SET trangthai = 4 WHERE donhang.id = ?1 AND nguoidat = ?2", nativeQuery = true)
     public int cancel(long iddonhang, Long iduser);
 
-
-
 }

@@ -36,6 +36,9 @@ public class DonHangController {
     private SanPhamService sanPhamService;
 
     @Autowired
+    private SanPhamRepository sanPhamRepository;
+
+    @Autowired
     private GioHangSanPhamRepository gioHangSanPhamRepository;
 
     @Autowired
@@ -168,9 +171,11 @@ public class DonHangController {
             sanPhamMuaRepository.save(sanPhamMua);
 
             loaiSPRepository.update(((s.getLoaiSanPham().getSoluong()) - s.getSoluong()), s.getLoaiSanPham().getId());
+
+            SanPham sp = s.getLoaiSanPham().getSanPhamLoai();
+            sp.setTong_ban(sp.getTong_ban()+s.getSoluong());
+            sanPhamRepository.save(sp);
         }
-//        HoaDon hoaDon = new HoaDon("Thanh toán khi nhận hàng", donHang, req.getTotal_price());
-//        hoaDonRepository.save(hoaDon);
 
         gioHangSanPhamRepository.delete(gioHang.getId());
 

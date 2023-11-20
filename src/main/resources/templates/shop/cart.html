@@ -79,12 +79,12 @@
                                 Tổng tiền: <span class="text-price"  th:text="${tong_tien}"></span>
                             </div>
                             <div class="button-container">
-                                <button th:if="${listCart_sp.size()} == 0" id="deleteButton" class="btn btn-danger">
+                                <button th:if="${listCart_sp.size()} != 0" id="deleteButton" class="btn btn-danger">
                                     <div class="delete-text right-content">
                                         <div class="delete main-content">Xóa tất cả sản phẩm trong giỏ hàng</div>
                                     </div>
                                 </button>
-                                <button id="createOrderButton" class="btn btn-primary">
+                                <button th:if="${listCart_sp.size()} != 0" id="createOrderButton" class="btn btn-primary">
                                     <div class="createOrder-text right-content">
                                         <div class="createOrder main-content">Tạo đơn hàng</div>
                                     </div>

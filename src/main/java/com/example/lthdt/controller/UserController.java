@@ -1,13 +1,11 @@
 package com.example.lthdt.controller;
 
-import com.example.lthdt.entity.DonHang;
-import com.example.lthdt.entity.GioHang;
-import com.example.lthdt.entity.HoaDon;
-import com.example.lthdt.entity.User;
+import com.example.lthdt.entity.*;
 import com.example.lthdt.exception.BadRequestException;
 import com.example.lthdt.repository.DonHangRepository;
 import com.example.lthdt.repository.GioHangRepository;
 import com.example.lthdt.repository.LoaiSPRepository;
+import com.example.lthdt.repository.SanPhamRepository;
 import com.example.lthdt.repository.model.dto.DonHangDTO;
 import com.example.lthdt.repository.model.dto.SanPhamMuaDTO;
 import com.example.lthdt.repository.model.dto.UserDTO;
@@ -61,6 +59,9 @@ public class UserController {
 
     @Autowired
     private LoaiSPRepository loaiSPRepository;
+
+    @Autowired
+    private SanPhamRepository sanPhamRepository;
 
     @Autowired
     private PaymentVNPayService paymentVNPayService;
@@ -190,7 +191,14 @@ public class UserController {
         for(SanPhamMuaDTO sanPhamMuaDTO:donHangDTO.getSanPhamMuas()){
             loaiSPRepository.update(((sanPhamMuaDTO.getLoaiSanPhamMua().getSoluong()) + (sanPhamMuaDTO.getSoluongmua())),
                     sanPhamMuaDTO.getLoaiSanPhamMua().getId());
+
+            Optional<SanPham> res = sanPhamRepository.findById(sanPhamMuaDTO.getSanPhamMua().getId());
+            SanPham sp = res.get();
+            sp.setTong_ban(sp.getTong_ban()-sanPhamMuaDTO.getSoluongmua());
+            sanPhamRepository.save(sp);
+
         }
+
         return ResponseEntity.ok("Hủy đơn hàng thành công");
     }
 
@@ -253,6 +261,8 @@ public class UserController {
 
         Optional<DonHang> result = donHangRepository.findById(orderId);
         DonHang donHang = result.get();
+        donHang.setPhuongthucthanhtoan(phuongthucthanhtoan);
+        donHangRepository.save(donHang);
 
         HoaDon hoaDon = new HoaDon(phuongthucthanhtoan, donHang, tongtra, info[1]);
         paymentVNPayService.addHoaDon(hoaDon);

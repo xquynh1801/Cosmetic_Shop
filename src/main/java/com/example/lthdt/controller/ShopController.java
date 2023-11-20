@@ -32,16 +32,7 @@ public class ShopController {
     private SanPhamService sanPhamService;
 
     @Autowired
-    private NhanHieuRepository nhanHieuRepository;
-
-    @Autowired
-    private SanPhamRepository sanPhamRepository;
-
-    @Autowired
     private LoaiSPRepository loaiSPRepository;
-
-    @Autowired
-    private LoaiSPService loaiSPService;
 
     @Autowired
     private NhanHieuService nhanHieuService;
@@ -62,10 +53,6 @@ public class ShopController {
         }
         model.addAttribute("products", newProducts);
 
-        // Get best seller products
-//        List<SanPhamDTO> bestSellerProducts = sanPhamService.getListBestSellerProduct();
-//        model.addAttribute("bestSellerProducts", bestSellerProducts);
-
         return "shop/index";
     }
 
@@ -81,8 +68,6 @@ public class ShopController {
             brandIds.add(brand.getId());
         }
         model.addAttribute("brandIds", brandIds);
-
-        System.out.println("============>listBrand " + brands.size());
 
         // Get list product
         FilterSPReq req = new FilterSPReq(brandIds, (long) 0, Long.MAX_VALUE, 1);

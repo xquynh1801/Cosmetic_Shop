@@ -80,7 +80,7 @@
                 <a th:href="@{/tai-khoan/lich-su-giao-dich}">
                     <button class="btn btn-secondary">Quay lại</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </a>
-                <button th:if="${order.isPaid == 0 and order.trangthai == 0 and order.trangthai == 1}" class="btn btn-primary" id="pay-btn" onclick="redirect()">Thanh toán</button>
+                <button th:if="${(order.isPaid == 0 && order.trangthai == 0) || (order.isPaid == 0 && order.trangthai == 1)}" class="btn btn-primary" id="pay-btn" onclick="redirect()">Thanh toán</button>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button th:if="${canCancel} == true" class="btn btn-primary red-btn cancel-btn" th:data-order="${order.id}">Hủy đơn hàng</button>
             </section>

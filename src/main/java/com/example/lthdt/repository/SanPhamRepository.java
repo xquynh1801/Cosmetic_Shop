@@ -3,9 +3,12 @@ package com.example.lthdt.repository;
 import com.example.lthdt.entity.SanPham;
 import com.example.lthdt.repository.model.dto.SanPhamDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
