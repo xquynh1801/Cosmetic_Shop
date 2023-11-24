@@ -24,6 +24,7 @@ public class DonHangMapper {
                 donHang.getTenNguoiNhan(),
                 donHang.getSdtNguoiNhan(),
                 donHang.getDiachiNguoiNhan(),
+                UserMapper.toUserDto(donHang.getNguoidat()),
                 sanPhamMuaDTOS,
                 donHang.getTonggia(),
                 donHang.getGiamgia(),

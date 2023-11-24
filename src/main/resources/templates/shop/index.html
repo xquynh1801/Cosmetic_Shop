@@ -38,7 +38,7 @@
                                            th:alt="${product.ten}"/>
                         <div class="card-body">
                             <h5 class="card-title" th:text="${product.ten}"></h5>
-                                <p class="price"><span class="text-price" th:text="${product.loaiSps[0].gia}"></span> &#x20AB; </p>
+                            <p class="price"><span class="text-price" th:text="${product != null and product.loaiSps.size() > 0 and product.loaiSps[0].gia != null ? product.loaiSps[0].gia : 0}"></span> &#x20AB; </p>
                             <p class="card-text sold">&Dstrok;&atilde; b&aacute;n <span th:text="${product.tong_ban}"></span></p>
                         </div>
                     </div>

@@ -59,7 +59,7 @@
                     <div style="display: flex; align-items: center;">
                         <span class="desc-sub-title" style="margin-right: 5px;">Giá:</span>
                         <p class="price">
-                            <span class="text-price" th:text="${product.loaiSps[0].gia}" id="giaSanPham"></span> &#x20AB;
+                            <span class="text-price" th:text="${product != null and product.loaiSps.size() > 0 and product.loaiSps[0].gia != null ? product.loaiSps[0].gia : 0}" id="giaSanPham"></span> &#x20AB;
                         </p>
                     </div>
                 </div>

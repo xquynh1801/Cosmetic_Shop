@@ -39,4 +39,7 @@ public interface SanPhamRepository extends JpaRepository<SanPham, String> {
     @Query(nativeQuery = true, value ="SELECT * \n" +
             "FROM sanpham where nhanhieu_id in (?1)\n")
     public List<SanPham> locSanPham(List<Integer> brands_id);
+
+    @Query(nativeQuery = true, value ="SELECT * FROM sanpham WHERE sanpham.is_available = true")
+    public List<SanPham> getAllAvailable();
 }

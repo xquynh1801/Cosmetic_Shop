@@ -1,19 +1,17 @@
 package com.example.lthdt.service.impl;
 
-import com.example.lthdt.entity.GioHang;
-import com.example.lthdt.entity.GioHangSanPham;
-import com.example.lthdt.entity.SanPham;
-import com.example.lthdt.entity.User;
+import com.example.lthdt.entity.*;
+import com.example.lthdt.exception.BadRequestException;
+import com.example.lthdt.exception.InternalServerException;
 import com.example.lthdt.exception.NotFoundException;
-import com.example.lthdt.repository.GioHangSanPhamRepository;
-import com.example.lthdt.repository.LoaiSPRepository;
-import com.example.lthdt.repository.SanPhamRepository;
+import com.example.lthdt.repository.*;
 import com.example.lthdt.repository.model.dto.LoaiSPDTO;
 import com.example.lthdt.repository.model.dto.SanPhamDTO;
 import com.example.lthdt.repository.model.dto.TrangDTO;
 import com.example.lthdt.repository.model.dto.UserDTO;
 import com.example.lthdt.repository.model.mapper.SanPhamMapper;
 import com.example.lthdt.repository.model.mapper.UserMapper;
+import com.example.lthdt.repository.model.request.CreateProductReq;
 import com.example.lthdt.repository.model.request.FilterSPReq;
 import com.example.lthdt.service.GioHangSanPhamService;
 import com.example.lthdt.service.GioHangService;
@@ -24,7 +22,10 @@ import com.example.lthdt.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.apache.commons.lang3.RandomStringUtils;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -37,6 +38,15 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Autowired
     private LoaiSPRepository loaiSPRepository;
+
+    @Autowired
+    private DonHangRepository donHangRepository;
+
+    @Autowired
+    private GioHangSanPhamRepository gioHangSanPhamRepository;
+
+    @Autowired
+    private SanPhamMuaRepository sanPhamMuaRepository;
 
     @Override
     public List<SanPhamDTO> getListNewProduct() {
@@ -62,27 +72,12 @@ public class SanPhamServiceImpl implements SanPhamService {
     public TrangDTO filterProduct(FilterSPReq req) {
         int limit = 16;
         PageUtil page  = new PageUtil(limit, req.getPage());
-
-        // Get list product and totalItems
         List<SanPham> products;
-        products = sanPhamRepository.locSanPham(req.getBrands());
+        products = sanPhamRepository.findAll();
 
         List<SanPhamDTO> sp = new ArrayList<>();
         for(SanPham s:products){
-
-            SanPhamDTO tmp_sp = SanPhamMapper.toSanPhamDTO(s);
-
-            List<LoaiSPDTO> loaiSp = loaiSPRepository.findLoaiSPtheoSanPhamIDvaKhoangGia(tmp_sp.getId(), req.getMinPrice(), req.getMaxPrice());
-            if(loaiSp.size() > 0) {
-                loaiSp.sort(new Comparator<LoaiSPDTO>() {
-                    @Override
-                    public int compare(LoaiSPDTO o1, LoaiSPDTO o2) {
-                        return Long.compare(o1.getGia(), o2.getGia());
-                    }
-                });
-                tmp_sp.setLoaiSps(loaiSp);
-                sp.add(tmp_sp);
-            }
+            sp.add(SanPhamMapper.toSanPhamDTO(s));
         }
         // Calculate total pages
         int totalPages = page.calculateTotalPage(sp.size());
@@ -147,5 +142,95 @@ public class SanPhamServiceImpl implements SanPhamService {
         SanPhamDTO dto = SanPhamMapper.toSanPhamDTO(product);
 
         return dto;
+    }
+
+    @Override
+    public String createProduct(CreateProductReq req) {
+        // Validate info
+//        if (req.getProductImages().size() == 0) {
+//            throw new BadRequestException("Danh sách ảnh trống");
+//        }
+
+        SanPham product = SanPhamMapper.toProduct(req);
+        product.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        product.setTong_ban(0);
+        // Gen id
+        String productId = RandomStringUtils.randomAlphanumeric(6);
+        product.setId(productId);
+
+        try {
+            sanPhamRepository.save(product);
+        } catch (Exception ex) {
+            throw new InternalServerException("Lỗi khi thêm sản phẩm");
+        }
+
+        return productId;
+    }
+
+    @Override
+    public void updateProduct(String id, CreateProductReq req) {
+        // Check product exist
+        Optional<SanPham> rs = sanPhamRepository.findById(id);
+        if (rs.isEmpty()) {
+            throw new NotFoundException("Sản phẩm không tồn tại");
+        }
+
+        // Validate info
+        if (req.getProductImages().size() == 0) {
+            throw new BadRequestException("Danh sách ảnh trống");
+        }
+
+        SanPham product = SanPhamMapper.toProduct(req);
+        product.setId(id);
+
+        try {
+            sanPhamRepository.save(product);
+        } catch (Exception ex) {
+            throw new InternalServerException("Lỗi khi cập nhật thông tin sản phẩm");
+        }
+    }
+
+    @Override
+    public void deleteProduct(String id) {
+        // Check product exist
+        Optional<SanPham> rs = sanPhamRepository.findById(id);
+        if (rs.isEmpty()) {
+            throw new NotFoundException("Sản phẩm không tồn tại");
+        }
+
+        List<LoaiSPDTO> lsps = loaiSPRepository.findLoaiSPtheoSanPhamID(id);
+
+        // If have order, can't delete
+        int countOrder=0;
+        for(LoaiSPDTO l:lsps){
+            countOrder = sanPhamMuaRepository.countByLoaiSanPhamMua_Id(l.getId());
+        }
+        if (countOrder > 0) {
+            throw new BadRequestException("Sản phẩm đã được đặt hàng không thể xóa");
+        }
+
+        try {
+            for(LoaiSPDTO l:lsps){
+                gioHangSanPhamRepository.deleteGioHangSanPhamsByLoaiSanPham_Id(l.getId());
+            }
+
+            loaiSPRepository.deleteByProductId(id);
+
+            sanPhamRepository.deleteById(id);
+        } catch (Exception ex) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            throw new InternalServerException("Lỗi khi xóa sản phẩm");
+        }
+    }
+
+    @Override
+    public List<SanPhamDTO> getAllAvailable() {
+        List<SanPham> sanPhamList = sanPhamRepository.getAllAvailable();
+        List<SanPhamDTO> sanPhamDTOList = new ArrayList<>();
+        for(SanPham sp:sanPhamList){
+            sanPhamDTOList.add(SanPhamMapper.toSanPhamDTO(sp));
+        }
+
+        return sanPhamDTOList;
     }
 }

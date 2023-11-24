@@ -11,4 +11,5 @@ import java.util.List;
 public interface MaGiamGiaRepository extends JpaRepository<MaGiamGia, Long> {
     @Query(nativeQuery = true, value ="SELECT * FROM magiamgia WHERE code = ?1 AND is_active = 1")
     public MaGiamGia findByCode(String code);
+
 }

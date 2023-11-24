@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -25,4 +25,17 @@ public interface LoaiSPRepository extends JpaRepository<LoaiSanPham, Long> {
     @Transactional
     @Query(value = "UPDATE loaisanpham SET soluong = ?1 WHERE id = ?2", nativeQuery = true)
     public int update(int soluong, Long id);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "Delete from loaisanpham where product_id = ?1")
+    public void deleteByProductId(String id);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE loaisanpham SET tenloai = ?1, gia = ?2, soluong = ?3 WHERE id = ?2", nativeQuery = true)
+    public int updateLSP(String ten, Long gia, int soluong);
+
+    @Query(value ="SELECT * FROM loaisanpham where tenloai = ?1 and sanpham_id=?2", nativeQuery = true)
+    public LoaiSanPham findByTenloaiAndAndSanPhamLoai(String ten, String idSP);
 }

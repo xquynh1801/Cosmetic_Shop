@@ -13,4 +13,10 @@ public class NhanHieuDTO {
     private int id;
 
     private String name;
+
+    private String mota;
+
+    private String img;
+
+    private int sl_sanpham;
 }

@@ -1,6 +1,7 @@
 package com.example.lthdt.repository.model.dto;
 
 import com.example.lthdt.entity.SanPhamMua;
+import com.example.lthdt.entity.User;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -20,6 +21,8 @@ public class DonHangDTO {
     private String sdtNguoiNhan;
 
     private String diachiNguoiNhan;
+
+    private UserDTO nguoidat;
 
     private List<SanPhamMuaDTO> sanPhamMuas;
 

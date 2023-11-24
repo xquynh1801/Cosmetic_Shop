@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/layout/layout_admin :: main-fragment(
+                                                ~{:: title},
+                                                ~{:: #css-resources},
+                                                ~{:: #js-resources},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title>Tạo đơn hàng mới</title>
+
+    <th:block id="css-resources">
+        <link rel="stylesheet" th:href="@{/adminlte/dist/css/order.css}">
+    </th:block>
+</head>
+<body>
+<main id="main-content">
+    <!-- Breadcrumb -->
+    <div class="row">
+        <div class="col-12">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="/admin/donhang">Danh sách đơn hàng</a></li>
+                <li class="breadcrumb-item active">Tạo đơn hàng mới</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <a role="button" class="btn btn-default" href="/admin/donhang">
+            <span class="fas fa-chevron-left" style="margin-right:0.5rem;"></span>
+            <span>Trở về</span>
+        </a>
+        <button class="btn btn-success btn-create-order">
+            <span class="fa fa-plus" style="margin-right:0.5rem;"></span>
+            <span>Tạo mới</span>
+        </button>
+        <div class="clear"></div>
+    </div>
+
+    <!-- Main content -->
+    <div class="row">
+        <div class="col-lg-6 col-md-8">
+            <div class="card card-outline">
+                <div class="card-body pad">
+                    <label>Thông tin người nhận</label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="Họ tên *" id="receiver-name">
+                                    <span class="invalid-feedback" id="invalid-feedback-name">Họ tên trống</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-phone-alt"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="Số điện thoại *" id="receiver-phone">
+                                    <span class="invalid-feedback" id="invalid-feedback-phone">Số điện thoại trống</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <textarea id="receiver-address" rows="5" placeholder="Địa chỉ *"></textarea>
+                                <span class="invalid-feedback" id="invalid-feedback-address">Địa chỉ trống</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <textarea rows="5" placeholder="Ghi chú" id="receiver-note"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-8">
+            <div class="card card-outline">
+                <div class="card-body pad">
+                    <label>Chi tiết đơn hàng</label>
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="form-group">
+                                <label for="productSelect">Sản phẩm</label>
+                                <select name="product" class="form-control thuy-search-select" id="productSelect">
+                                    <th:block th:each="product : ${products}">
+                                        <option th:value="${product.id}" th:text="${product.ten}"></option>
+                                    </th:block>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="size">Loại sản phẩm</label>
+                                <select class="form-control" id="size" th:disabled="${#lists.isEmpty(products)}">
+                                    <option th:each="loaiSP : ${#lists.isEmpty(products) ? null : products[0].loaiSps}"
+                                            th:if="${loaiSP.soluong > 0}"
+                                            th:value="${loaiSP.id}"
+                                            th:data-gia="${loaiSP.gia}"
+                                            th:data-soluong="${loaiSP.soluong}">
+                                        <span th:text="${loaiSP.tenloai}"></span>
+                                    </option>
+
+                                    <option th:each="loaiSP : ${#lists.isEmpty(products) ? null : products[0].loaiSps}"
+                                            th:if="${loaiSP.soluong <= 0}"
+                                            th:value="${loaiSP.id}"
+                                            th:data-gia="${loaiSP.gia}"
+                                            th:data-soluong="0"
+                                            disabled>
+                                        <span th:text="${loaiSP.tenloai}" style="color: gray; text-decoration: line-through"></span>
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="soluong">Số lượng</label>
+                                <input id="soluong" value="0" style="width: 90px; height: 39px;">
+                                <span class="invalid-feedback" id="invalid-feedback-soluong">Số lượng trống</span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="size">Khuyến mãi</label>
+                                <select class="form-control" id="promotion">
+                                    <option value="">Chọn khuyến mãi</option>
+                                    <th:block th:each="mgg : ${maGiamGiaList}">
+                                        <option th:value="${mgg.id}" th:text="${mgg.code}"></option>
+                                    </th:block>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="info-price-div">
+                                <div class="display-info-price">
+                                    <span>Tổng giá</span>
+                                    <span class="text-price" id="product-price">0</span>
+                                </div>
+                                <div class="display-info-price">
+                                    <span>Giảm giá</span>
+                                    <span class="text-price" id="promotion-price">0</span>
+                                </div>
+                                <div class="display-info-price">
+                                    <span>Phí giao hàng</span>
+                                    <span>Miễn phí</span>
+                                </div>
+                                <div class="display-info-price">
+                                    <span>Tổng trả</span>
+                                    <span class="text-price" id="total-price">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<th:block id="js-resources">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script th:inline="javascript">
+
+        $(document).ready(function () {
+            // Bắt sự kiện khi giá trị của ô chọn sản phẩm thay đổi
+            $("#productSelect").change(function () {
+                // Lấy giá trị được chọn
+                var selectedProductId = $(this).val();
+
+                // Gửi yêu cầu Ajax để lấy danh sách loại sản phẩm tương ứng
+                $.ajax({
+                    type: "GET",
+                    url: "/api/getLoaiSps/productId=" + selectedProductId, // Thay đổi URL theo cấu trúc của ứng dụng của bạn
+                    success: function (data) {
+                        // Xóa tất cả các tùy chọn hiện tại trong ô chọn loại sản phẩm
+                        $("#size").empty();
+
+                        // Thêm các tùy chọn mới dựa trên dữ liệu nhận được từ máy chủ
+                        $.each(data, function (index, loaiSP) {
+                            var option = $("<option>")
+                                .attr("value", loaiSP.id)
+                                .attr("data-gia", loaiSP.gia)
+                                .attr("data-soluong", loaiSP.soluong)
+                                .text(loaiSP.tenloai);
+
+                            // Nếu số lượng <= 0, disable tùy chọn
+                            if (loaiSP.soluong <= 0) {
+                                option.prop("disabled", true)
+                                    .css({ "color": "gray", "text-decoration": "line-through" });
+                            }
+
+                            // Thêm tùy chọn vào ô chọn loại sản phẩm
+                            $("#size").append(option);
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Lỗi khi gửi yêu cầu Ajax:", error);
+                    }
+                });
+            });
+        });
+
+        $('.btn-create-order').click(function() {
+            $('.invalid-feedback').hide();
+            let receiverName = $('#receiver-name').val();
+            let receiverPhone = $('#receiver-phone').val();
+            let receiverAddress = $('#receiver-address').val();
+            let note = $('#receiver-note').val();
+            let product = $('#productSelect').val();
+            let size = $('#size').val();
+            let soluong = parseInt($('#soluong').val());
+            let promotion = $('#promotion').val();
+            let isValid = true;
+
+            if (receiverName.length == 0) {
+                $('#invalid-feedback-name').show();
+                isValid = false;
+            }
+            if (receiverPhone.length == 0) {
+                $('#invalid-feedback-phone').show();
+                isValid = false;
+            }
+            if (receiverAddress.length == 0) {
+                $('#invalid-feedback-address').show();
+                isValid = false;
+            }
+            if (size == null) {
+                $('#invalid-feedback-product').show();
+                isValid = false;
+            }
+            if (soluong == 0) {
+                $('#invalid-feedback-soluong').show();
+                isValid = false;
+            }
+
+            if (isValid) {
+                req = {
+                    product_id: product,
+                    loai_id: size,
+                    soluong: soluong,
+                    receiver_name: receiverName,
+                    receiver_phone: receiverPhone,
+                    receiver_address: receiverAddress,
+                    coupon_code: promotion,
+                    total_price: totalPrice,
+                    product_price: productPrice,
+                    note: note,
+                }
+                var myJSON = JSON.stringify(req);
+                $.ajax({
+                    url: '/api/order',
+                    type: 'POST',
+                    data: myJSON,
+                    contentType: "application/json; charset=utf-8",
+                    success: function(data) {
+                        toastr.success("Tạo đơn hàng thành công");
+                        setTimeout(function() {
+                            location.href = "/admin/orders/"+data;
+                        }, 1000)
+                    },
+                    error: function(data) {
+                        toastr.warning(data.responseJSON.message);
+                    },
+                });
+            }
+        })
+
+    </script>
+</th:block>
+</body>
+</html>

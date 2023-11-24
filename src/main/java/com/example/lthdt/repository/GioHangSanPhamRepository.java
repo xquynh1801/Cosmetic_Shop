@@ -28,4 +28,9 @@ public interface GioHangSanPhamRepository extends JpaRepository<GioHangSanPham, 
     @Query(value = "DELETE FROM sanpham_giohang WHERE giohang_id = ?1", nativeQuery = true)
     public int delete(Long id);
 
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM sanpham_giohang WHERE loaisanpham_id = ?1", nativeQuery = true)
+    public int deleteGioHangSanPhamsByLoaiSanPham_Id(Long id);
+
 }
