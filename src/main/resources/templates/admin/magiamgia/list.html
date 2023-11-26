@@ -121,18 +121,6 @@
     <script type="text/javascript" th:src="@{/vendor/pagination/jquery.simplePagination.js}"></script>
     <script type="text/javascript" th:src="@{/adminlte/dist/js/table.js}"></script>
     <script th:inline="javascript">
-        var name, code, active;
-
-        $(function () {
-             let vars = parseUrl();
-             name = vars["name"] || ""
-             code = vars["code"] || ""
-             active = vars["active"] || ""
-
-             $('#name').val(name)
-             $('#code').val(code)
-             $('#active').val(active)
-        });
     </script>
 </th:block>
 </body>
