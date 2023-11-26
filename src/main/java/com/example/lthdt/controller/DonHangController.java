@@ -190,7 +190,7 @@ public class DonHangController {
         }
 
         MaGiamGia maGiamGia = maGiamGiaRepository.findByCode(req.getMagiamgia());
-        if (maGiamGia != null || !maGiamGia.equals("")) {
+        if (maGiamGia != null) {
             long sl = maGiamGia.getSoluong() - 1;
             maGiamGiaRepository.update(sl, maGiamGia.getId());
         }

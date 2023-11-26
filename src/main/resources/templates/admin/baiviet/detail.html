@@ -84,7 +84,7 @@
                                 <label class="required-label">Hình ảnh</label>
                                 <div class="thumbnail-container">
                                     <div class="img-div">
-                                        <img id="preview-img" alt="Thumbnail post">
+                                        <img id="preview-img" th:src="${post.image}" alt="Thumbnail post">
                                     </div>
                                 </div>
                                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#choose-img-modal">

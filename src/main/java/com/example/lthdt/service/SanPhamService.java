@@ -27,4 +27,6 @@ public interface SanPhamService {
     public void deleteProduct(String id);
 
     public List<SanPhamDTO> getAllAvailable();
+
+    public TrangDTO adminGetListProduct(String name, String brand);
 }

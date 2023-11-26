@@ -1,6 +1,7 @@
 package com.example.lthdt.repository;
 
 import com.example.lthdt.entity.DonHang;
+import com.example.lthdt.entity.SanPham;
 import com.example.lthdt.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -38,5 +39,10 @@ public interface DonHangRepository extends JpaRepository<DonHang, Long> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM donhang dh WHERE dh.modified_at BETWEEN ? AND ? AND dh.trangthai = 3 AND dh.nguoidat=?")
     List<DonHang> findOrdersOfUser(Date batdau, Date ketthuc, User user);
+
+    @Query(nativeQuery = true, value = "SELECT DISTINCT donhang.*\n" +
+            "FROM donhang\n" +
+            "WHERE donhang.trangthai LIKE CONCAT('%',?1,'%') \n")
+    public List<DonHang> adminGetListDH(String trangthai);
 
 }

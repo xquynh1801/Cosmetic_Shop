@@ -49,7 +49,7 @@
                         <table class="table table-striped table-bordered table-hover">
                             <thead>
                             <tr class="heading">
-                                <th width="20%">
+                                <th width="15%">
                                     Tiêu đề
                                 </th>
                                 <th width="15%">
@@ -58,10 +58,13 @@
                                 <th width="25%">
                                     Nội dung
                                 </th>
-                                <th width="25%">
+                                <th width="15%">
                                     Mô tả
                                 </th>
-                                <th width="15%" class="thuy-sort-area" data-order="post.created_at">
+                                <th width="15%">
+                                    Người tạo
+                                </th>
+                                <th width="15%">
                                     Ngày tạo
                                     <i class="fa fa-sort float-right" style="margin-top: 3px;"></i>
                                 </th>
@@ -80,6 +83,7 @@
                                         </td>
                                         <td th:text="${post.noidung}"></td>
                                         <td th:text="${post.mota}"></td>
+                                        <td th:text="${post.createdBy.hoten}"></td>
                                         <td th:text="${post.createdAt}"></td>
                                     </tr>
                                 </th:block>
@@ -101,32 +105,6 @@
     <script type="text/javascript" th:src="@{/vendor/pagination/jquery.simplePagination.js}"></script>
     <script type="text/javascript" th:src="@{/adminlte/dist/js/table.js}"></script>
     <script th:inline="javascript">
-        var title, status, order, page, direction;
-
-        $(function () {
-             let vars = parseUrl();
-             title = vars["title"] || ""
-             status = vars["status"] || ""
-             order = vars["order"] || "post.created_at"
-             page = vars["page"] || "1"
-             direction = vars["direction"] || "desc"
-
-             $('#order').val(order)
-             $('#page').val(page)
-             $('#direction').val(direction)
-             $('#title').val(title)
-             $('#status').val(status)
-
-            if (order != "id") {
-              var th = $('.heading').find(`[data-order='` + order + `']`)
-              th.find('i').removeClass("fa-sort")
-              if (direction == "asc") {
-                  th.find('i').addClass("fas fa-sort-up")
-              } else {
-                  th.find('i').addClass("fas fa-sort-down")
-              }
-            }
-        });
     </script>
 </th:block>
 </body>

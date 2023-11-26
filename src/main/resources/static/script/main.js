@@ -61,6 +61,7 @@ $(document).on('click', function (e) {
                 contentType: "application/json; charset=utf-8",
                 success: function(data) {
                     toastr.success("Đăng nhập thành công");
+                    location.reload(true);
                     signedValidate(true, data.hoten);
                     $('.modal').modal('hide');
                 },

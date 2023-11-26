@@ -50,7 +50,8 @@ public class QLDonHangController {
     private MaGiamGiaRepository maGiamGiaRepository;
 
     @GetMapping("/admin/donhang")
-    public String getOrderManagePage(Model model) {
+    public String getOrderManagePage(Model model,
+                                     @RequestParam(defaultValue = "%%") String trangthai) {
         // Get list product to select
         List<DonHang> donHangList = donHangRepository.findAll();
         List<DonHangDTO> donHangDTOList = new ArrayList<>();
@@ -58,7 +59,8 @@ public class QLDonHangController {
             donHangDTOList.add(DonHangMapper.toDonHangDTO(dh));
         }
 
-        model.addAttribute("donHangDTOList", donHangDTOList);
+        List<DonHang> donHangList1 = donHangService.adminGetListDH(trangthai);
+        model.addAttribute("donHangDTOList", donHangList1);
 
         return "admin/donhang/list";
     }

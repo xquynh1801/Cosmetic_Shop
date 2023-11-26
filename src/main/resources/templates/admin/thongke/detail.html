@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/layout/layout_admin :: main-fragment(
+                                                ~{:: title},
+                                                ~{:: #css-resources},
+                                                ~{:: #js-resources},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title th:text="'Đơn hàng ' + ${order.id}"></title>
+
+    <th:block id="css-resources">
+        <link rel="stylesheet" th:href="@{/adminlte/dist/css/order.css}">
+    </th:block>
+</head>
+<body>
+<main id="main-content">
+    <!-- Breadcrumb -->
+    <div class="row">
+        <div class="col-12">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="/admin/thongke">Thống kê doanh thu tháng theo khách hàng</a></li>
+                <li class="breadcrumb-item active" th:text="'Đơn hàng ' + ${order.id}"></li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline">
+                <div class="card-body pad">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="info-div">
+                                <label>Thông tin người đặt</label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" readonly th:value="${order.nguoidat.hoten}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-phone-alt"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" readonly th:value="${order.nguoidat.sdt}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" readonly th:value="${order.nguoidat.email}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" readonly th:value="${order.createdAt}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="info-div">
+                                <label>Thông tin người nhận</label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            </div>
+                                            <input id="receiver-name" type="text" class="form-control" th:value="${order.tenNguoiNhan}">
+                                            <span class="invalid-feedback" id="invalid-feedback-name">Họ tên trống</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-phone-alt"></i></span>
+                                            </div>
+                                            <input id="receiver-phone" type="text" class="form-control" th:value="${order.sdtNguoiNhan}">
+                                            <span class="invalid-feedback" id="invalid-feedback-phone">Điện thoại trống</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-12">
+                                        <div class="input-group">
+                                            <textarea name="receiver-address" id="receiver-address" rows="5" th:text="${order.diachiNguoiNhan}"></textarea>
+                                            <span class="invalid-feedback" id="invalid-feedback-address">Địa chỉ trống</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="info-div">
+                                <label>Chi tiết đơn hàng</label>
+                                <th:block th:if="${order.trangthai} == 0">
+                                    <button class="btn" onclick="openModalChangeDetailOrder()"><i class="fas fa-edit"></i></button>
+                                </th:block>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Sản phẩm</th>
+                                                <th>Loại sản phẩm</th>
+                                                <th>Số lượng</th>
+                                                <th>Giá tiền</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <th:block th:each="sp : ${order.sanPhamMuas}">
+                                                <tr>
+                                                    <td th:text="${sp.sanPhamMua.ten}"></td>
+                                                    <td th:text="${sp.loaiSanPhamMua.tenloai}"></td>
+                                                    <td th:text="${sp.soluongmua}"></td>
+                                                    <td th:text="${sp.loaiSanPhamMua.gia}"></td>
+                                                </tr>
+                                            </th:block>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="info-price-div">
+                                <div class="display-info-price">
+                                    <span>Tổng giá</span>
+                                    <span class="text-price" th:text="${order.tonggia}"></span>
+                                </div>
+                                <div class="display-info-price">
+                                    <span>Giảm giá</span>
+                                    <span class="text-price" th:text="${order.giamgia}"></span>
+                                </div>
+                                <div class="display-info-price">
+                                    <span>Phí giao hàng</span>
+                                    <span th:text="${order.phigiaohang}"></span>
+                                </div>
+                                <div class="display-info-price">
+                                    <span>Tổng trả</span>
+                                    <span class="text-price" th:text="${order.tongtra}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<th:block id="js-resources">
+    <script th:inline="javascript">
+
+        $('.btn-update-order').click(function() {
+            $('.invalid-feedback').hide();
+            $.ajax({
+                url: '/api/admin/donhang/'+[[${order.id}]]+'/update-status',
+                type: 'PUT',
+                contentType: "application/json; charset=utf-8",
+                success: function(data) {
+                    toastr.success("Xác nhận thành công");
+                    setTimeout(function() {
+                        location.href = "/admin/donhang/"+[[${order.id}]];
+                    }, 1000)
+                },
+                error: function(data) {
+                    toastr.warning(data.responseJSON.message);
+                },
+            });
+        })
+    </script>
+</th:block>
+</body>
+</html>

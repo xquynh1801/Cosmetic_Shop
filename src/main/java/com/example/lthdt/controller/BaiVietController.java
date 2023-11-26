@@ -16,24 +16,9 @@ public class BaiVietController {
 
     @GetMapping("/tin-tuc")
     public String getBlogPage(Model model) {
-        List<BaiViet> baiVietList = baivietRepository.findAll();
+        List<BaiViet> baiVietList = baivietRepository.getBaiViet();
         model.addAttribute("baiVietList", baiVietList);
 
         return "tintuc/blog";
-    }
-
-    @GetMapping("/chinh-sach")
-    public String getPolicyPage(Model model) {
-        return "blog/policy";
-    }
-
-    @GetMapping("/dieu-khoan")
-    public String getRulesPage(Model model) {
-         return "blog/rules";
-    }
-
-    @GetMapping("/hoi-dap")
-    public String getQAPage(Model model) {
-        return "blog/faqs";
     }
 }

@@ -64,9 +64,12 @@ public class QlBaiVietController {
 
         Optional<BaiViet> rs = baivietRepository.findById(id);
         BaiViet post = rs.get();
-        model.addAttribute("post", post);
+        if(user.getId() == post.getCreatedBy().getId()){
+            model.addAttribute("post", post);
+            return "admin/baiviet/detail";
+        }
 
-        return "admin/baiviet/detail";
+        return "error/401";
     }
 
     @PutMapping("/api/admin/posts/{id}")

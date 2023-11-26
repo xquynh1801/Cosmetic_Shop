@@ -28,7 +28,7 @@ public interface LoaiSPRepository extends JpaRepository<LoaiSanPham, Long> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "Delete from loaisanpham where product_id = ?1")
+    @Query(nativeQuery = true, value = "Delete from loaisanpham where sanpham_id = ?1")
     public void deleteByProductId(String id);
 
     @Modifying
@@ -38,4 +38,7 @@ public interface LoaiSPRepository extends JpaRepository<LoaiSanPham, Long> {
 
     @Query(value ="SELECT * FROM loaisanpham where tenloai = ?1 and sanpham_id=?2", nativeQuery = true)
     public LoaiSanPham findByTenloaiAndAndSanPhamLoai(String ten, String idSP);
+
+    @Query(value ="SELECT sanpham_id FROM loaisanpham where id = ?1", nativeQuery = true)
+    public String findSPIdByLoaiSPId(long id);
 }

@@ -107,10 +107,17 @@
     <script type="text/javascript" th:src="@{/vendor/currency/currency.min.js}"></script>
     <script th:inline="javascript">
         let isLogined = [[${isLogined}]];
+        let role = [[${role}]];
 
         $(function () {
             if (isLogined == true) {
                 signedValidate(true, [[${user_fullname}]]);
+                if (role === 'ADMIN'){
+                    window.location.href = "/admin";
+                }
+                if (role === 'NVGH'){
+                    window.location.href = "/nvgh";
+                }
             } else {
                 signedValidate();
             }

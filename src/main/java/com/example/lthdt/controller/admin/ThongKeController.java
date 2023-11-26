@@ -107,4 +107,15 @@ public class ThongKeController {
 
         return "admin/thongke/orderList";
     }
+
+    @GetMapping("/admin/thongke/{id}")
+    public String getOrderDetailPage(Model model, @PathVariable long id) {
+        Optional<DonHang> rs = donHangRepository.findById(id);
+        DonHang donHang = rs.get();
+
+        DonHangDTO order = DonHangMapper.toDonHangDTO(donHang);
+        model.addAttribute("order", order);
+
+        return "admin/thongke/detail";
+    }
 }

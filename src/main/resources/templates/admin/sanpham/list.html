@@ -69,9 +69,7 @@
                             </tr>
                             <tr class="heading-search">
                                 <form method="GET" id="search-form">
-                                    <th>
-                                        <input type="text" name="id" id="id" class="form-control thuy-search-input">
-                                    </th>
+                                    <th></th>
                                     <th>
                                         <input type="text" name="name" id="name" class="form-control thuy-search-input">
                                     </th>
@@ -84,9 +82,6 @@
                                         </select>
                                     </th>
                                     <th></th>
-                                    <input type="hidden" name="page" id="page">
-                                    <input type="hidden" name="order" id="order">
-                                    <input type="hidden" name="direction" id="direction">
                                 </form>
                             </tr>
                             </thead>
@@ -121,8 +116,14 @@
     <script type="text/javascript" th:src="@{/vendor/pagination/jquery.simplePagination.js}"></script>
     <script type="text/javascript" th:src="@{/adminlte/dist/js/table.js}"></script>
     <script th:inline="javascript">
+        var name, brand;
 
         $(function () {
+            let vars = parseUrl();
+            name = vars["name"] || ""
+            brand = vars["brand"] || ""
+            $('#name').val(name)
+            $('#brand').val(brand)
             pagination([[${totalPages}]], [[${currentPage}]]);
         });
     </script>

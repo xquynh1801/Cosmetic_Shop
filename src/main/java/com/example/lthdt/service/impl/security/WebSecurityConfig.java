@@ -54,6 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/check_create_order", "/create_order", "/saveOrder", "/api/check-magiamgia",
                         "/tai-khoan", "/tai-khoan/**", "/api/change-password", "/api/update-profile").authenticated()
                 .antMatchers("/admin/**", "/api/admin/**").hasRole("ADMIN")
+                .antMatchers("/nvgh/**", "/api/nvgh/**").hasRole("NVGH")
                 .anyRequest().permitAll()
                 .and()
 //                .oauth2Login()

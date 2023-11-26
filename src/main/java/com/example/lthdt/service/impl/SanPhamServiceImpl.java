@@ -72,12 +72,25 @@ public class SanPhamServiceImpl implements SanPhamService {
     public TrangDTO filterProduct(FilterSPReq req) {
         int limit = 16;
         PageUtil page  = new PageUtil(limit, req.getPage());
+        // Get list product and totalItems
         List<SanPham> products;
-        products = sanPhamRepository.findAll();
+        products = sanPhamRepository.locSanPham(req.getBrands());
 
         List<SanPhamDTO> sp = new ArrayList<>();
         for(SanPham s:products){
-            sp.add(SanPhamMapper.toSanPhamDTO(s));
+            SanPhamDTO tmp_sp = SanPhamMapper.toSanPhamDTO(s);
+
+            List<LoaiSPDTO> loaiSp = loaiSPRepository.findLoaiSPtheoSanPhamIDvaKhoangGia(tmp_sp.getId(), req.getMinPrice(), req.getMaxPrice());
+            if(loaiSp.size() > 0) {
+                loaiSp.sort(new Comparator<LoaiSPDTO>() {
+                    @Override
+                    public int compare(LoaiSPDTO o1, LoaiSPDTO o2) {
+                        return Long.compare(o1.getGia(), o2.getGia());
+                    }
+                });
+                tmp_sp.setLoaiSps(loaiSp);
+                sp.add(tmp_sp);
+            }
         }
         // Calculate total pages
         int totalPages = page.calculateTotalPage(sp.size());
@@ -233,4 +246,18 @@ public class SanPhamServiceImpl implements SanPhamService {
 
         return sanPhamDTOList;
     }
+
+    @Override
+    public TrangDTO adminGetListProduct(String name, String brand) {
+        int limit = 15;
+        PageUtil pageInfo  = new PageUtil(limit, 1);
+
+        List<SanPham> products = sanPhamRepository.adminGetListProduct(name, brand, limit , pageInfo.calculateOffset());
+        int totalItems = sanPhamRepository.countAdminGetListProduct(name, brand);
+
+        int totalPages = pageInfo.calculateTotalPage(totalItems);
+
+        return new TrangDTO(products, totalPages, pageInfo.getPage());
+    }
+
 }

@@ -50,21 +50,23 @@ public class QLSanPhamController {
     private ImageService imageService;
 
     @GetMapping("/admin/products")
-    public String getListProduct(Model model) {
+    public String getListProduct(Model model,
+                                 @RequestParam(defaultValue = "") String name,
+                                 @RequestParam(defaultValue = "%%") String brand) {
         // Get list brand
         List<NhanHieuDTO> brands = nhanHieuService.getListBrand();
         model.addAttribute("brands", brands);
 
 
         ArrayList<Integer> brandIds = new ArrayList<Integer>();
-        for (NhanHieuDTO brand : brands) {
-            brandIds.add(brand.getId());
+        for (NhanHieuDTO br : brands) {
+            brandIds.add(br.getId());
         }
         model.addAttribute("brandIds", brandIds);
 
         // Get list product
-        FilterSPReq req = new FilterSPReq(brandIds, (long) 0, Long.MAX_VALUE, 1);
-        TrangDTO result = sanPhamService.filterProduct(req);
+//        FilterSPReq req = new FilterSPReq(brandIds, (long) 0, Long.MAX_VALUE, 1);
+        TrangDTO result = sanPhamService.adminGetListProduct(name, brand);
         model.addAttribute("totalPages", result.getTotalPages());
         model.addAttribute("currentPage", result.getCurrentPage());
         model.addAttribute("products", result.getItems());
@@ -115,11 +117,17 @@ public class QLSanPhamController {
         if(req.getId() != 0){
             LoaiSanPham loaiSanPham = loaiSPRepository.findByTenloaiAndAndSanPhamLoai(req.getTenloai(), req.getProductId());
 
-            if(loaiSanPham != null && loaiSanPham.getId() == req.getId()){
+            if(loaiSanPham == null) {
                 loaiSPService.updateLoaiSP(req);
                 return ResponseEntity.ok("Cap nhat thanh cong");
-            }else if(loaiSanPham != null && loaiSanPham.getId() != req.getId()){
-                return ResponseEntity.ok("Loai san pham trung ten");
+            }
+            if(loaiSanPham != null) {
+                if (loaiSanPham.getId() != req.getId()) {
+                    return ResponseEntity.ok("Loai san pham trung ten");
+                } else if (loaiSanPham.getId() == req.getId()) {
+                    loaiSPService.updateLoaiSP(req);
+                    return ResponseEntity.ok("Cap nhat thanh cong");
+                }
             }
         }
 
@@ -159,9 +167,10 @@ public class QLSanPhamController {
 
     @GetMapping("/api/delete/loaisanpham/{id}")
     public String deleteloaisanpham(@PathVariable Long id) {
+        String sanphamId = loaiSPRepository.findSPIdByLoaiSPId(id);
         loaiSPService.deleteLoaiSP(id);
 
-        return "redirect:/admin/products";
+        return "redirect:/admin/products/" + sanphamId;
     }
 
     @GetMapping("/admin/products/create")

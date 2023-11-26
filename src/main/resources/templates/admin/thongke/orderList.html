@@ -73,7 +73,7 @@
                             <th:block th:each="order : ${donHangDTOList}">
                                 <tr>
                                     <td>
-                                        <a th:href="@{/admin/donhang/{id}(id=${order.id})}" th:text="${order.id}"></a>
+                                        <a th:href="@{/admin/thongke/{id}(id=${order.id})}" th:text="${order.id}"></a>
                                     </td>
                                     <td th:text="${order.tenNguoiNhan}"></td>
                                     <td th:text="${order.sdtNguoiNhan}"></td>

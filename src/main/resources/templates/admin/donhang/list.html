@@ -68,6 +68,25 @@
                                     Ngày tạo đơn
                                 </th>
                             </tr>
+                            <tr class="heading-search">
+                                <form method="GET" id="search-form">
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>
+                                        <select name="trangthai" class="form-control thuy-search-select" id="trangthai">
+                                            <option value="">Tất cả</option>
+                                            <option th:value="0">Chờ xác nhận</option>
+                                            <option th:value="1">Chờ giao hàng</option>
+                                            <option th:value="2">Đang giao hàng</option>
+                                            <option th:value="3">Đã giao hàng</option>
+                                            <option th:value="4">Đã huỷ</option>
+                                        </select>
+                                    </th>
+                                    <th></th>
+                                    <th></th>
+                                </form>
+                            </tr>
                             </thead>
                             <tbody>
                                 <th:block th:each="order : ${donHangDTOList}">
@@ -103,21 +122,13 @@
     <script type="text/javascript" th:src="@{/vendor/pagination/jquery.simplePagination.js}"></script>
     <script type="text/javascript" th:src="@{/adminlte/dist/js/table.js}"></script>
     <script th:inline="javascript">
-        var id, name, phone, status, product;
+        var trangthai;
 
         $(function () {
             let vars = parseUrl();
-            id = vars["id"] || ""
-            name = vars["name"] || ""
-            phone = vars["phone"] || ""
-            status = vars["status"] || ""
-            product = vars["product"] || ""
+            trangthai = vars["trangthai"] || ""
 
-            $('#id').val(id)
-            $('#name').val(name)
-            $('#phone').val(phone)
-            $('#status').val(status)
-            $('#product').val(product)
+            $('#trangthai').val(trangthai)
         });
     </script>
 </th:block>

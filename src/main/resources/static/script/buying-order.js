@@ -71,22 +71,6 @@ function showListOrder(data) {
     $('#list-order').html(html);
 }
 
-// $('.pay-btn').click(function() {
-//     let orderId = $(this).data("order");
-//     $.ajax({
-//         url: '/api/pay/'+orderId,
-//         type: 'GET',
-//         contentType: "application/json; charset=utf-8",
-//         success: function(data) {
-//             console.log(data);
-//             location.href = data;
-//         },
-//         error: function(data) {
-//             toastr.warning(data.responseJSON.message);
-//         }
-//     });
-// })
-
 $('.cancel-btn').click(function() {
     let orderId = $(this).data("order");
     $.ajax({

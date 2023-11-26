@@ -42,4 +42,17 @@ public interface SanPhamRepository extends JpaRepository<SanPham, String> {
 
     @Query(nativeQuery = true, value ="SELECT * FROM sanpham WHERE sanpham.is_available = true")
     public List<SanPham> getAllAvailable();
+
+    @Query(nativeQuery = true, value = "SELECT DISTINCT sanpham.*\n" +
+            "FROM sanpham\n" +
+            "WHERE sanpham.ten LIKE CONCAT('%',?1,'%') AND sanpham.nhanhieu_id LIKE ?2 \n" +
+            "LIMIT ?3\n" +
+            "OFFSET ?4")
+    public List<SanPham> adminGetListProduct(String name, String brand, int limit, int offset);
+
+    @Query(nativeQuery = true, value = "SELECT count(distinct sanpham.id)\n" +
+            "FROM sanpham\n" +
+            "WHERE sanpham.ten LIKE CONCAT('%',:name,'%') AND sanpham.nhanhieu_id LIKE :brand \n")
+    public int countAdminGetListProduct(@Param("name") String name, @Param("brand") String brand);
+
 }

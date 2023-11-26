@@ -20,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -34,8 +35,12 @@ public class GHDonHangController {
     @Autowired
     private HoaDonRepository hoaDonRepository;
 
+    @Autowired
+    private DonHangService donHangService;
+
     @GetMapping("/nvgh/donhang")
-    public String getOrderManagePage(Model model) {
+    public String getOrderManagePage(Model model,
+                                     @RequestParam(defaultValue = "%%") String trangthai) {
         // Get list product to select
         List<DonHang> donHangList = donHangRepository.findAll();
         List<DonHangDTO> donHangDTOList = new ArrayList<>();
@@ -43,7 +48,8 @@ public class GHDonHangController {
             donHangDTOList.add(DonHangMapper.toDonHangDTO(dh));
         }
 
-        model.addAttribute("donHangDTOList", donHangDTOList);
+        List<DonHang> donHangList1 = donHangService.adminGetListDH(trangthai);
+        model.addAttribute("donHangDTOList", donHangList1);
 
         return "nvgh/list";
     }

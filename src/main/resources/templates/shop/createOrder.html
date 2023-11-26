@@ -162,6 +162,9 @@
                 addressInvalid.html('Vui lòng nhập địa chỉ nhận hàng');
                 isValid = false;
             }
+            if (magiamgia === null) {
+                magiamgia = "";
+            }
 
             if (isValid) {
                 req = {

@@ -56,7 +56,8 @@ public class LoaiSPServiceImpl implements LoaiSPService {
 
     @Override
     public void updateLoaiSP(UpdateLoaiSP req) {
-        LoaiSanPham loaiSanPham = loaiSPRepository.findByTenloaiAndAndSanPhamLoai(req.getTenloai(), req.getProductId());
+        Optional<LoaiSanPham> rs = loaiSPRepository.findById(req.getId());
+        LoaiSanPham loaiSanPham = rs.get();
         loaiSanPham.setTenloai(req.getTenloai());
         loaiSanPham.setGia(req.getGia());
         loaiSanPham.setSoluong(req.getSoluong());
