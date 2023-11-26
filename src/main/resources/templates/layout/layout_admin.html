@@ -43,18 +43,6 @@
                     <i class="fas fa-user"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                    <a href="/tai-khoan" class="dropdown-item">
-                        <div class="media">
-                            Trang chủ
-                        </div>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="/tai-khoan" class="dropdown-item">
-                        <div class="media">
-                            Cập nhật profile
-                        </div>
-                    </a>
-                    <div class="dropdown-divider"></div>
                     <a href="/api/logout" class="dropdown-item">
                         <div class="media">
                             Đăng xuất
@@ -195,6 +183,23 @@
                         </a>
                         <ul class="nav nav-treeview">
 
+                        </ul>
+                    </li>
+                    <li class="nav-item has-treeview">
+                        <a href="/admin/thongke" class="nav-link">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                Thống kê
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/admin/thongke" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Thống kê doanh thu tháng theo khách hàng</p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 </ul>

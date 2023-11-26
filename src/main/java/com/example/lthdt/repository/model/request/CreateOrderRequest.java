@@ -13,6 +13,7 @@ public class CreateOrderRequest {
     private String receiver_name;
     private String receiver_phone;
     private String receiver_address;
+    private String magiamgia;
     private long price;
     private long giamgia;
     private long total_price;

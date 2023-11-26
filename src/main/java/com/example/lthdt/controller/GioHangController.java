@@ -9,6 +9,7 @@ import com.example.lthdt.repository.model.mapper.GioHangSanPhamMapper;
 import com.example.lthdt.repository.model.mapper.UserMapper;
 import com.example.lthdt.repository.model.request.AddToCartRequest;
 import com.example.lthdt.repository.model.request.DeleteAllProductCartRequest;
+import com.example.lthdt.repository.model.request.UpdateGioHangSPReq;
 import com.example.lthdt.service.GioHangSanPhamService;
 import com.example.lthdt.service.GioHangService;
 import com.example.lthdt.service.SanPhamService;
@@ -136,6 +137,26 @@ public class GioHangController {
         GioHangSanPhamDTO gioHangSanPham= GioHangSanPhamMapper.toGioHangSanPhamDTO(result.get());
         model.addAttribute("gioHangSanPham", gioHangSanPham);
         return "shop/fix-cart";
-//        return "404";
     }
+
+    @PostMapping("/api/update-cartproduct")
+    public ResponseEntity<?> UpdateGioHangSP(@Valid @RequestBody UpdateGioHangSPReq req) {
+        // Lấy người dùng hiện đang đăng nhập (sử dụng Spring Security)
+        User currentUser = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+        UserDTO user = UserMapper.toUserDto((currentUser));
+
+        Optional<GioHangSanPham> rs = gioHangSanPhamRepository.findById(req.getGioHangSanPhamId());
+        GioHangSanPham gioHangSanPham = rs.get();
+
+        Optional<LoaiSanPham> res = loaiSPRepository.findById(req.getLoaiSPId());
+        LoaiSanPham loaiSanPham = res.get();
+
+        gioHangSanPham.setLoaiSanPham(loaiSanPham);
+        gioHangSanPham.setSoluong(req.getSoLuong());
+
+        gioHangSanPhamRepository.save(gioHangSanPham);
+
+        return ResponseEntity.ok("ok");
+    }
+
 }

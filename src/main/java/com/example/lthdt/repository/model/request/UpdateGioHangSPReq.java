@@ -7,10 +7,12 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
-public class CheckMaGiamGiaResponse {
-    private String thongbao;
+@Getter
+public class UpdateGioHangSPReq {
+    private long gioHangSanPhamId;
 
-    private long max_giatri;
+    private long loaiSPId;
+
+    private int soLuong;
 }

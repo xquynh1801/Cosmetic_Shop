@@ -18,6 +18,7 @@ public class DonHangMapper {
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDate = donHang.getCreatedAt().toLocalDateTime().format(formatter);
+        String formattedDate2 = donHang.getModifiedAt().toLocalDateTime().format(formatter);
 
         return new DonHangDTO(
                 donHang.getId(),
@@ -31,6 +32,7 @@ public class DonHangMapper {
                 donHang.getPhigiaohang(),
                 donHang.getTongtra(),
                 formattedDate,
+                formattedDate2,
                 donHang.getPhuongthucthanhtoan(),
                 donHang.getTrangthai(),
                 donHang.getIsPaid());

@@ -115,6 +115,7 @@
                 data: myJSON,
                 contentType: "application/json; charset=utf-8",
                 success: function(data) {
+                    toastr.warning(data.thongbao);
                     giamgia = data.max_giatri;
                     totalPrice = price - giamgia;
                     $('#in-price').val(price);
@@ -134,6 +135,7 @@
             let receiverName = $('#in-user-fullname').val();
             let receiverPhone = $('#in-user-phone').val();
             let receiverAddress = $('#in-user-address').val();
+            let magiamgia = $('#in-coupon').val();
             let isValid = true;
             if (receiverName.length == 0) {
                 fullNameInvalid = $('#in-user-fullname').next();
@@ -166,6 +168,7 @@
                     receiver_name: receiverName,
                     receiver_phone: receiverPhone,
                     receiver_address: receiverAddress,
+                    magiamgia: magiamgia,
                     price: price,
                     giamgia: giamgia,
                     total_price: totalPrice,

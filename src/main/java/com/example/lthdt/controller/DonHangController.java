@@ -113,14 +113,25 @@ public class DonHangController {
 
     @PostMapping("/api/check-magiamgia")
     public ResponseEntity<?> checkMaGiamGia(@Valid @RequestBody CheckMaGiamGiaRequest req) {
-        long giagiam = 0;
         CheckMaGiamGiaResponse checkMaGiamGiaResponse = new CheckMaGiamGiaResponse();
 
         MaGiamGia maGiamGia = maGiamGiaRepository.findByCode(req.getMagiamgia());
         if (maGiamGia == null || maGiamGia.equals("")) {
+            checkMaGiamGiaResponse.setThongbao("Nhập sai mã giảm giá");
             checkMaGiamGiaResponse.setMax_giatri(0);
         } else {
-            checkMaGiamGiaResponse.setMax_giatri(maGiamGia.getMax_giatri());
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            Timestamp expiredAt = maGiamGia.getExpiredAt();
+            if(now.after(expiredAt)){
+                checkMaGiamGiaResponse.setThongbao("Mã giảm giá hết hạn");
+                checkMaGiamGiaResponse.setMax_giatri(0);
+            }else if(maGiamGia.getSoluong() < 1){
+                checkMaGiamGiaResponse.setThongbao("Mã giảm giá hết lượt sử dụng");
+                checkMaGiamGiaResponse.setMax_giatri(0);
+            }else {
+                checkMaGiamGiaResponse.setThongbao("Áp dụng mã giảm giá thành công");
+                checkMaGiamGiaResponse.setMax_giatri(maGiamGia.getMax_giatri());
+            }
         }
 
         return ResponseEntity.ok(checkMaGiamGiaResponse);
@@ -156,6 +167,7 @@ public class DonHangController {
         donHang.setPhigiaohang("Miễn phí");
         donHang.setTongtra(req.getTotal_price());
         donHang.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        donHang.setModifiedAt(new Timestamp(System.currentTimeMillis()));
         donHang.setNguoidat(currentUser);
         donHang.setPhuongthucthanhtoan("Thanh toán khi nhận hàng");
         donHang.setTrangthai(0);
@@ -175,6 +187,12 @@ public class DonHangController {
             SanPham sp = s.getLoaiSanPham().getSanPhamLoai();
             sp.setTong_ban(sp.getTong_ban()+s.getSoluong());
             sanPhamRepository.save(sp);
+        }
+
+        MaGiamGia maGiamGia = maGiamGiaRepository.findByCode(req.getMagiamgia());
+        if (maGiamGia != null || !maGiamGia.equals("")) {
+            long sl = maGiamGia.getSoluong() - 1;
+            maGiamGiaRepository.update(sl, maGiamGia.getId());
         }
 
         gioHangSanPhamRepository.delete(gioHang.getId());

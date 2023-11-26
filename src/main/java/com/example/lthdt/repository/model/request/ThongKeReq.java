@@ -5,12 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
-public class CheckMaGiamGiaResponse {
-    private String thongbao;
+@Getter
+public class ThongKeReq {
+    private Date batDauDate;
 
-    private long max_giatri;
+    private Date ketThucDate;
 }

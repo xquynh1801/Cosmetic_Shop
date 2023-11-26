@@ -72,4 +72,5 @@ public class DonHang {
 
     @Column(name = "note")
     private String note;
+
 }

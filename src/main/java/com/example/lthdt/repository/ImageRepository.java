@@ -15,6 +15,10 @@ public interface ImageRepository extends JpaRepository<Image, String> {
 
     public Image findByLink(String link);
 
-    @Query(nativeQuery = true, value = "SELECT 1 FROM baiviet, sanpham, nhanhieu WHERE (baiviet.image = ?1) OR (nhanhieu.image = ?1) OR (JSON_CONTAINS(sanpham.product_images,CONCAT('\"',?1,'\"'),'$') > 0)")
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM baiviet WHERE image = ?1 " +
+            "UNION ALL " +
+            "SELECT COUNT(*) FROM nhanhieu WHERE image = ?1 " +
+            "UNION ALL " +
+            "SELECT COUNT(*) FROM sanpham WHERE FIND_IN_SET(?1, REPLACE(product_images, ',', '')) > 0")
     public Integer checkImgInUse(String link);
 }

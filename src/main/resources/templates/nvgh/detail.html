@@ -20,8 +20,8 @@
     <div class="row">
         <div class="col-12">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="/admin/donhang">Danh sách đơn hàng</a></li>
+                <li class="breadcrumb-item"><a href="/nvgh">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="/nvgh/donhang">Danh sách đơn hàng</a></li>
                 <li class="breadcrumb-item active" th:text="'Đơn hàng ' + ${order.id}"></li>
             </ol>
         </div>
@@ -29,12 +29,18 @@
 
     <!-- Toolbar -->
     <div class="toolbar">
-        <a role="button" class="btn btn-default" href="/admin/donhang">
+        <a role="button" class="btn btn-default" href="/nvgh/donhang">
             <span class="fas fa-chevron-left" style="margin-right:0.5rem;"></span>
             <span>Trở về</span>
         </a>
-        <button th:if="${order.trangthai} == 0" class="btn btn-success btn-update-order">
-            <span>Xác nhận đơn hàng</span>
+        <button th:if="${order.trangthai} == 1" class="btn btn-success btn-update-order">
+            <span>Xác nhận lấy hàng</span>
+        </button>
+        <button th:if="${order.trangthai} == 2" class="btn btn-success btn-update-order">
+            <span>Xác nhận đã giao</span>
+        </button>
+        <button th:if="${order.isPaid == 0 && order.trangthai == 2}" class="btn btn-success btn-cancel-order">
+            <span>Huỷ đơn hàng</span>
         </button>
         <div class="clear"></div>
     </div>
@@ -46,45 +52,6 @@
                 <div class="card-body pad">
                     <div class="row">
                         <div class="col-md-8">
-                            <div class="info-div">
-                                <label>Thông tin người đặt</label>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                            </div>
-                                            <input type="text" class="form-control" readonly th:value="${order.nguoidat.hoten}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-phone-alt"></i></span>
-                                            </div>
-                                            <input type="text" class="form-control" readonly th:value="${order.nguoidat.sdt}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row" style="margin-top: 10px;">
-                                    <div class="col-md-6">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                            </div>
-                                            <input type="text" class="form-control" readonly th:value="${order.nguoidat.email}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                            </div>
-                                            <input type="text" class="form-control" readonly th:value="${order.createdAt}">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="info-div">
                                 <label>Thông tin người nhận</label>
                                 <div class="row">
@@ -178,13 +145,31 @@
         $('.btn-update-order').click(function() {
             $('.invalid-feedback').hide();
             $.ajax({
-                url: '/api/admin/donhang/'+[[${order.id}]]+'/update-status',
+                url: '/api/nvgh/donhang/'+[[${order.id}]]+'/update-status',
                 type: 'PUT',
                 contentType: "application/json; charset=utf-8",
                 success: function(data) {
                     toastr.success("Xác nhận thành công");
                     setTimeout(function() {
-                        location.href = "/admin/donhang/"+[[${order.id}]];
+                        location.href = "/nvgh/donhang/"+[[${order.id}]];
+                    }, 1000)
+                },
+                error: function(data) {
+                    toastr.warning(data.responseJSON.message);
+                },
+            });
+        })
+
+        $('.btn-cancel-order').click(function() {
+            $('.invalid-feedback').hide();
+            $.ajax({
+                url: '/api/nvgh/donhang/'+[[${order.id}]]+'/update-cancel',
+                type: 'PUT',
+                contentType: "application/json; charset=utf-8",
+                success: function(data) {
+                    toastr.success("Xác nhận thành công");
+                    setTimeout(function() {
+                        location.href = "/nvgh/donhang/"+[[${order.id}]];
                     }, 1000)
                 },
                 error: function(data) {

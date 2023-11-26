@@ -35,7 +35,7 @@ public class ImageServiceImpl implements ImageService {
         }
 
         Integer inUse = imageRepository.checkImgInUse(link);
-        if (inUse != null) {
+        if (inUse != 0) {
             throw new BadRequestException("Ảnh đã được sử dụng không thể xóa");
         }
 

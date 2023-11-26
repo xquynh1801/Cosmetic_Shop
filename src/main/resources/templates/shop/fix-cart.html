@@ -16,8 +16,6 @@
         <link rel="stylesheet" type="text/css" th:href="@{/css/components/products.css}"/>
         <link rel="stylesheet" type="text/css" th:href="@{/css/components/index/product-showcase.css}"/>
         <link rel="stylesheet" type="text/css" th:href="@{/css/components/product-details/product-info.css}"/>
-        <link rel="stylesheet" type="text/css" th:href="@{/css/components/product-details/size-choose.css}"/>
-        <link rel="stylesheet" type="text/css" th:href="@{/css/components/product-details/size-guide-table.css}"/>
         <link rel="stylesheet" type="text/css" th:href="@{/css/except-home-page.css}"/>
         <link rel="stylesheet" type="text/css" th:href="@{/css/product-details.css}"/>
     </th:block>
@@ -46,11 +44,6 @@
                         <img class="img-fluid" th:src="${gioHangSanPham.sanPham.image[0]}" alt="image-1"/>
                     </div>
                 </div>
-<!--                <div class="slider slider-nav">-->
-<!--                    <div th:each="img, index : ${gioHangSanPham.sanPham.image}">-->
-<!--                        <img class="img-fluid" th:src="${img}" th:alt="'img-'+${index.index}"/>-->
-<!--                    </div>-->
-<!--                </div>-->
             </div>
             <div class="product-info col-lg-6">
                 <div class="title h3">Mô tả sản phẩm</div>
@@ -97,10 +90,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="buy-btn">
-                    <button id="buyButton" class="btn btn-danger">
-                        <div class="buy-text right-content">
-                            <div class="buy-now main-content">Cập nhật</div>
+                <div class="fix-btn">
+                    <button id="fixButton" class="btn btn-danger">
+                        <div class="fix-text right-content">
+                            <div class="fix-now main-content">Cập nhật</div>
                         </div>
                     </button>
                 </div>
@@ -143,6 +136,39 @@
             var currentQuantity = parseInt(quantityInput.value);
             quantityInput.value = currentQuantity + 1;
         }
+
+        $('.fix-now').click(function() {
+            let selectedLoaiSP = $("#loaiSP").val();
+            let selectedLoaiSPSoluong = $("#loaiSP option:selected").data("soluong");
+            let quantityInput = document.getElementById("quantity");
+            let quantity = parseInt(quantityInput.value);
+
+            if (selectedLoaiSPSoluong < quantity) {
+                toastr.warning("Số lượng hàng không đủ.");
+            } else {
+                req = {
+                    "gioHangSanPhamId": [[${gioHangSanPham.id}]],
+                    "loaiSPId": selectedLoaiSP, // loaiSPid
+                    "soLuong": quantity // Số lượng
+                }
+                var myJSON = JSON.stringify(req);
+                $.ajax({
+                    type: "POST",
+                    url: "/api/update-cartproduct",
+                    data: myJSON,
+                    contentType: "application/json; charset=utf-8",
+                    success: function(response) {
+                        toastr.success("Sửa thành công");
+                        setTimeout(function() {
+                            location.href = "/gio-hang";
+                        }, 1000)
+                    },
+                    error: function() {
+                        toastr.error("Lỗi khi sửa.");
+                    }
+                });
+            }
+        })
 
     </script>
 </th:block>

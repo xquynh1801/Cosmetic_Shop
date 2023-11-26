@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/layout/layout :: main-fragment(
+                                                ~{:: title},
+                                                'short-header',
+                                                ~{:: #css-resources},
+                                                ~{:: #js-resources},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title>Tin tức</title>
+
+    <th:block id="css-resources">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/components/header.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/news.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/except-home-page.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/vendor/pagination/simplePagination.css}"/>
+    </th:block>
+</head>
+<body>
+<main id="main-content">
+    <!-- List Post -->
+    <section class="news-wrapper container">
+        <div class="container-fluid">
+            <div class="row" th:each="post : ${baiVietList}" style="margin-bottom: 100px">
+                <div class="thumbnail col-lg-6 col-12">
+                    <img class="img-fluid" th:src="${post.image}" th:alt="${post.title}"/>
+                </div>
+                <div class="details col-5 mx-1">
+                    <div class="font-weight-bold" th:text="${post.title}"></div>
+                    <div class="font-italic" th:text="${post.mota}"></div>
+                    <div class="short-desc" th:text="${post.noidung}"></div>
+                    <div class="font-weight-light" th:text="${#dates.format(post.createdAt, 'dd/MM/yyyy')}"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<th:block id="js-resources">
+    <script type="text/javascript" th:src="@{/vendor/pagination/jquery.simplePagination.js}"></script>
+    <script th:src="@{/script/except-home-page.js}"></script>
+    <script th:inline="javascript">
+    </script>
+</th:block>
+</body>
+</html>
+
+

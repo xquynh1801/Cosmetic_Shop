@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/layout/layout_admin :: main-fragment(
+                                                ~{:: title},
+                                                ~{:: #css-resources},
+                                                ~{:: #js-resources},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title>Thống kê doanh thu</title>
+
+    <th:block id="css-resources">
+        <link rel="stylesheet" type="text/css" th:href="@{/vendor/pagination/simplePagination.css}"/>
+    </th:block>
+</head>
+<body>
+<main id="main-content">
+    <!-- Breadcrumb -->
+    <div class="row">
+        <div class="col-12">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                <li class="breadcrumb-item active">Thống kê doanh thu tháng theo khách hàng</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <form class="form-inline">
+        <div class="form-group mb-2">
+            <label>Thời gian thống kê:</label>&emsp;
+            <label>Từ</label>&emsp;
+            <input type="date" class="form-control" id="batdau">&emsp;
+            <label>Đến</label>&emsp;
+            <input type="date" class="form-control" id="ketthuc">
+        </div>&nbsp;&nbsp;&nbsp;&nbsp;
+        <button type="submit" class="btn btn-success mb-2 btn-thongke">Thống kê</button>
+    </form>
+    <form class="form-inline">
+        <div class="form-group mb-2">
+            <label>Tổng doanh thu:</label>&emsp;
+            <span class="text-price" id="tongdoanhthu">0</span>
+        </div>
+    </form>&nbsp;&nbsp;&nbsp;
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline">
+                <div class="card-body pad">
+                    <div class="table-responsive">
+                        <!-- Table data -->
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                            <tr class="heading">
+                                <th width="10%">
+                                    Id khách hàng
+                                </th>
+                                <th width="50%">
+                                    Tên khách hàng
+                                </th>
+                                <th width="40%">
+                                    Điện thoại
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="list-khachhang">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<th:block id="js-resources">
+    <script type="text/javascript" th:src="@{/vendor/pagination/jquery.simplePagination.js}"></script>
+    <script type="text/javascript" th:src="@{/adminlte/dist/js/table.js}"></script>
+    <script th:inline="javascript">
+
+        $('.btn-thongke').click(function(e) {
+            e.preventDefault();
+            // Lấy giá trị từ trường input date bắt đầu
+            var batDauInput = document.getElementById('batdau');
+            var batDauValue = batDauInput.value;
+
+            // Lấy giá trị từ trường input date kết thúc
+            var ketThucInput = document.getElementById('ketthuc');
+            var ketThucValue = ketThucInput.value;
+
+            isValid = true;
+
+            if ((batDauValue == null || batDauValue == "")
+                || (ketThucValue == null || ketThucValue == "")) {
+                toastr.warning("Vui lòng chọn thời gian thống kê");
+                isValid = false;
+            }
+
+            if (isValid) {
+                var batDauDate = new Date(batDauValue);
+                var ketThucDate = new Date(ketThucValue);
+                req = {
+                    batDauDate: batDauDate,
+                    ketThucDate: ketThucDate
+                }
+                console.log('==== req:' + req);
+                var myJSON = JSON.stringify(req);
+                $.ajax({
+                    url: '/api/admin/thongke',
+                    type: 'POST',
+                    data: myJSON,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data === "Khong tim thay") {
+                            toastr.warning(data);
+                        } else {
+                            // Xóa tất cả các dòng hiện tại trong tbody
+                            var tbody = document.querySelector('.list-khachhang');
+                            tbody.innerHTML = '';
+
+                            var userList = data.userList;
+                            var tongdoanhthu = data.tongdoanhthu;
+
+                            // Lặp qua mỗi user trong userList và thêm vào tbody
+                            userList.forEach(function(user) {
+                                var row = tbody.insertRow();
+
+                                // Tạo một thẻ a và thiết lập href với user.id
+                                var link = document.createElement('a');
+                                var url = '/orderListOfUser?id=' + user.id + '&batdau=' + encodeURIComponent(data.batdau) + '&ketthuc=' + encodeURIComponent(data.ketthuc);
+                                link.href = url;
+                                link.textContent = user.id;
+
+                                // Thêm thẻ a vào ô đầu tiên (td) của mỗi dòng
+                                var cell1 = row.insertCell(0);
+                                cell1.appendChild(link);
+
+                                var cell2 = row.insertCell(1);
+                                cell2.textContent = user.hoten;
+
+                                var cell3 = row.insertCell(2);
+                                cell3.textContent = user.sdt;
+
+                            });
+                            var tongdoanhthuElement = document.getElementById('tongdoanhthu');
+                            tongdoanhthuElement.textContent = tongdoanhthu;
+                        }
+                    },
+                    error: function (data) {
+                        toastr.warning(data.responseJSON.message);
+                    },
+                });
+            }
+        })
+    </script>
+</th:block>
+</body>
+</html>
+
+

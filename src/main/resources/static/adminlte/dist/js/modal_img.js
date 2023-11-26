@@ -98,9 +98,10 @@ $('.btn-delete-img').click(function() {
                     values.splice(index, 1);
                 }
                 imgList.remove('grid-item-img', url);
+				toastr.success(data.responseJSON.message);
         	},
         	error: function(data) {
-        		toastr.warning(data.responseJSON.message);
+        		toastr.warning("Ảnh đã được sử dụng không thể xóa");
         	}
         });
 	}

@@ -36,6 +36,8 @@ public class DonHangDTO {
 
     private String createdAt;
 
+    private String modifiedAt;
+
     private String phuongthucthanhtoan;
 
     private int trangthai;
